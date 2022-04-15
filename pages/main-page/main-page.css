@@ -1,0 +1,60 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-size: 100%;
+}
+
+.container {
+  display: flex;
+  justify-content: space-between;
+  height: 100vh;
+}
+
+.room {
+  width: 100%;
+  height: 100vh;
+}
+
+.room__position{
+  position: relative;
+  width: 890px;
+  margin: auto;
+}
+
+.person {
+  position: relative;
+  width: 30vw;
+  height: 100%;
+  background-color: #F6F6F6;
+  z-index: 2;
+}
+
+.room__bg {
+  position: relative;
+  width: fit-content;
+  height: 100vh;
+}
+
+.room__bg-img {
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+.room__img {
+  position: absolute;
+  transition: transform .3s;
+}
+
+.room__img:hover {
+  transform: scale(1.15);
+}
+
+.person__img {
+  position: absolute;
+  width: 150px;
+  bottom: 20px;
+  right: 50%;
+  transform: translateX(50%);
+}
