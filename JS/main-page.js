@@ -90,7 +90,7 @@
     },
     init() {
       this.initContainer(startWrapper);
-      this.initText();
+      //this.initText();
     },
     initContainer(container) {
       container = document.getElementById('start-wrapper');
@@ -115,6 +115,7 @@
       </div> 
     </section> 
     <section class="person">
+      <div class="person__text" id="text"> ${this.text.helloText}</div>
       <img id ="head" class="person__img" src="pages/main-page/img/head.svg" alt="">
     </section>
     </div>
@@ -200,6 +201,8 @@
   // // });
   window.addEventListener('resize', () => {
     game.resize('bg');
-    game.resize('popUp');
+    if (document.getElementById('popUp')) {
+      game.resize('popUp');
+    }
   });
 }
