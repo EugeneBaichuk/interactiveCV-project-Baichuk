@@ -84,9 +84,8 @@
       mobileText: 'We have found some of his contact details and usefull links.<br><br> His name is Eugene. Hi, Eugene!',
     },
     start() {
-      this.started = true;
       this.init();
-      this.resize();
+      this.resize('bg');
       this.changeText();
     },
     init() {
@@ -99,17 +98,20 @@
     <div class='main-container' id='container'>
     <section id="roomContainer" class="room">
       <div id="room" class="room__position">
-        <img class="room__bg-img" id="bg" src="pages/main-page/img/room.svg" alt="room">
-        <img id="books" class="room__img" src="pages/main-page/img/books.svg" alt="">
-        <img id="certificate" class="room__img" src="pages/main-page/img/certificate.svg" alt="">
-        <img id="coffee" class="room__img" src="pages/main-page/img/coffee.svg" alt="">
-        <img id="hard-shelf" class="room__img" src="pages/main-page/img/hard-shelf.svg" alt="">
-        <img id="hobby" class="room__img" src="pages/main-page/img/hobby.svg" alt="">
-        <img id="learn-shelf" class="room__img" src="pages/main-page/img/lern-shelf.svg" alt="">
-        <img id="mobile" class="room__img" src="pages/main-page/img/mobile.svg" alt="">
-        <img id="pc" class="room__img" src="pages/main-page/img/pc.svg" alt="">
-        <img id="photo" class="room__img" src="pages/main-page/img/photo.svg" alt="">
-        <img id="workbook" class="room__img" src="pages/main-page/img/workbook.svg" alt="">
+        <div id="view">
+          <img class="room__bg-img" id="bg" src="pages/main-page/img/room.svg" alt="room">
+          <img id="books" class="room__img" src="pages/main-page/img/books.svg" alt="">
+          <img id="certificate" class="room__img" src="pages/main-page/img/certificate.svg" alt="">
+          <img id="coffee" class="room__img" src="pages/main-page/img/coffee.svg" alt="">
+          <img id="hard-shelf" class="room__img" src="pages/main-page/img/hard-shelf.svg" alt="">
+          <img id="hobby" class="room__img" src="pages/main-page/img/hobby.svg" alt="">
+          <img id="learn-shelf" class="room__img" src="pages/main-page/img/lern-shelf.svg" alt="">
+          <img id="mobile" class="room__img" src="pages/main-page/img/mobile.svg" alt="">
+          <img id="pc" class="room__img" src="pages/main-page/img/pc.svg" alt="">
+          <img id="photo" class="room__img" src="pages/main-page/img/photo.svg" alt="">
+          <img id="workbook" class="room__img" src="pages/main-page/img/workbook.svg" alt="">
+        </div>
+        <div id="popUpContainer"></div>   
       </div> 
     </section> 
     <section class="person">
@@ -126,10 +128,10 @@
       text.innerHTML = this.text.helloText;
       document.querySelector('.person').insertBefore(text, head);
     },
-    resize() {
+    resize(bgId) {
       const room = document.getElementById('room');
       const roomContainer = document.getElementById('roomContainer');
-      const bgObj = document.getElementById('bg');
+      const bgObj = document.getElementById(bgId);
       let width = this.bg.width;
       let height = this.bg.height;
       const realWidth = roomContainer.offsetWidth;
@@ -167,12 +169,26 @@
     },
     changeText() {
       const roomContainer = document.getElementById('roomContainer');
+      const popUpContainer = document.getElementById('popUpContainer');
       const text = document.getElementById('text');
       const Objs = Object.keys(this.interactiveObjs);
       roomContainer.addEventListener('click', (e) => {
         Objs.forEach(item => {
           if (e.target.id === item) {
             text.innerHTML = this.text[`${item}Text`];
+            popUpContainer.innerHTML = `<img id="popUp" class="room__bg-img room__popup" src="pages/pop-ups/img/pc-popup.svg" alt="pc-popUp">`;
+            const popUp = document.getElementById('popUp');
+            const popUpBg = document.createElement('div');
+            popUpBg.classList.add('room__bg');
+
+
+            roomContainer.appendChild(popUpBg);
+            setTimeout(() => {
+              popUp.style.transform = 'translateX(0)';
+              popUp.style.zIndex = '50';
+              popUpBg.style.background = 'rgba(0,46,136,0.5)';
+            }, '0');
+            this.resize('popUp');
           }
         });
       });
@@ -183,6 +199,7 @@
   game.start();
   // // });
   window.addEventListener('resize', () => {
-    game.resize();
+    game.resize('bg');
+    game.resize('popUp');
   });
 }

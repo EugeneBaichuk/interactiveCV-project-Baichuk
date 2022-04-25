@@ -9,6 +9,16 @@
   height: 100%;
 }
 
+.room__bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,46,136,0);
+  transition: background 1s ease-out;
+}
+
 .room__position{
   position: relative;
   width: 890px;
@@ -23,16 +33,21 @@
   z-index: 2;
 }
 
-.room__bg {
+/* .room__bg {
   position: relative;
   width: fit-content;
   height: 100vh;
-}
+} */
 
 .room__bg-img {
   position: absolute;
+  transition: transform 1s ease-out;
   left: 0;
   top: 0;
+}
+
+.room__popup {
+  transform: translateX(-100%);
 }
 
 .room__img {
