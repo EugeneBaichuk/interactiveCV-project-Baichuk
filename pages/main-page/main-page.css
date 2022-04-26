@@ -50,6 +50,13 @@
   transform: translateX(-100%);
 }
 
+.room__close-btn {
+  position: absolute;
+  right: 2rem;
+  top: 3.5rem;
+  z-index: 60;
+}
+
 .room__img {
   position: absolute;
   transition: transform .3s;

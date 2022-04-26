@@ -65,6 +65,13 @@
         top: 681,
         left: 527
       },
+      'closeBtn': {
+        width: 31.75 * 2,
+        height: 31.75 * 2,
+        top: 80,
+        left: 700
+      },
+
     },
     bg: {
       width: 808,
@@ -78,15 +85,27 @@
       'hard-shelfText': 'Bingo!<br><br>We have found essential information about this Junior\'s hard skills.<br><br>It\'s interesting...',
       certificateText: 'Let\'s see. He finished "IT&#8209;academy" courses in Grodno. <br><br> In my opinion, these courses are some of the best in Belarus. Their graduates have good enough skills to become Junior Developers.',
       'learn-shelfText': 'This is his diploma.<br><br>Let\'s see if he has a higher education.<br><br>Yes, he has!',
-      coffeeText: 'Oops...',
+      coffeeText: 'He likes coffee very much. <br><br>Oops...',
       booksText: 'These are B2 level English books.<br><br>I guessed this guy knew English.',
       workbookText: 'His employment record book... <br><br> He works as a marketing specialist at JSC "Grodno Azot". <br><br> I think this background also may be usefull.',
       mobileText: 'We have found some of his contact details and usefull links.<br><br> His name is Eugene. Hi, Eugene!',
     },
+    popup: {
+      hobby: 'hobby',
+      photo: 'photo',
+      pc: 'pc',
+      'hard-shelfPopup': 'a',
+      certificate: 'certificate',
+      'learn-shelfPopup': 'a',
+      books: 'a',
+      workbook: 'a',
+      mobile: 'mobile',
+
+    },
     start() {
       this.init();
       this.resize('bg');
-      this.changeText();
+      this.changeTextAndPopups();
     },
     init() {
       this.initContainer(startWrapper);
@@ -121,14 +140,14 @@
     </div>
     `;
     },
-    initText() {
-      const text = document.createElement('div');
-      const head = document.getElementById('head');
-      text.classList.add('person__text');
-      text.id = 'text';
-      text.innerHTML = this.text.helloText;
-      document.querySelector('.person').insertBefore(text, head);
-    },
+    // initText() {
+    //   const text = document.createElement('div');
+    //   const head = document.getElementById('head');
+    //   text.classList.add('person__text');
+    //   text.id = 'text';
+    //   text.innerHTML = this.text.helloText;
+    //   document.querySelector('.person').insertBefore(text, head);
+    // },
     resize(bgId) {
       const room = document.getElementById('room');
       const roomContainer = document.getElementById('roomContainer');
@@ -163,12 +182,14 @@
     },
     setObjSizeAndPos(widthIndex, heightIndex, item) {
       let obj = document.getElementById(item);
-      obj.style.top = (this.interactiveObjs[item].top * heightIndex) + 'px';
-      obj.style.left = (this.interactiveObjs[item].left * widthIndex) + 'px';
-      obj.style.width = (this.interactiveObjs[item].width * widthIndex) + 'px';
-      obj.style.height = (this.interactiveObjs[item].height * heightIndex) + 'px';
+      if (obj) {
+        obj.style.top = (this.interactiveObjs[item].top * heightIndex) + 'px';
+        obj.style.left = (this.interactiveObjs[item].left * widthIndex) + 'px';
+        obj.style.width = (this.interactiveObjs[item].width * widthIndex) + 'px';
+        obj.style.height = (this.interactiveObjs[item].height * heightIndex) + 'px';
+      }
     },
-    changeText() {
+    changeTextAndPopups() {
       const roomContainer = document.getElementById('roomContainer');
       const popUpContainer = document.getElementById('popUpContainer');
       const text = document.getElementById('text');
@@ -176,20 +197,32 @@
       roomContainer.addEventListener('click', (e) => {
         Objs.forEach(item => {
           if (e.target.id === item) {
-            text.innerHTML = this.text[`${item}Text`];
-            popUpContainer.innerHTML = `<img id="popUp" class="room__bg-img room__popup" src="pages/pop-ups/img/pc-popup.svg" alt="pc-popUp">`;
-            const popUp = document.getElementById('popUp');
-            const popUpBg = document.createElement('div');
-            popUpBg.classList.add('room__bg');
 
-
-            roomContainer.appendChild(popUpBg);
-            setTimeout(() => {
-              popUp.style.transform = 'translateX(0)';
-              popUp.style.zIndex = '50';
-              popUpBg.style.background = 'rgba(0,46,136,0.5)';
-            }, '0');
-            this.resize('popUp');
+            if (item !== 'closeBtn') {
+              text.innerHTML = this.text[`${item}Text`];
+            }
+            if (item !== 'coffee' && item !== 'closeBtn') {
+              popUpContainer.innerHTML = `
+              <img id="closeBtn" class="room__close-btn" src="pages/main-page/img/pop-ups/close-btn.svg"
+              alt = "pc-popUp" >
+              <img id="popUp" class="room__bg-img room__popup" src="pages/main-page/img/pop-ups/${item}-popup.svg" alt="pc-popUp">
+              `;
+              const popUp = document.getElementById('popUp');
+              const popUpBg = document.createElement('div');
+              popUpBg.classList.add('room__bg');
+              roomContainer.appendChild(popUpBg);
+              setTimeout(() => {
+                popUp.style.transform = 'translateX(0)';
+                popUp.style.zIndex = '50';
+                popUpBg.style.background = 'rgba(0,46,136,0.5)';
+              }, '0');
+              this.resize('popUp');
+            }
+            if (item === 'closeBtn') {
+              const popUpBg = document.querySelector('.room__bg');
+              popUpContainer.innerHTML = '';
+              roomContainer.removeChild(popUpBg);
+            }
           }
         });
       });
@@ -200,9 +233,11 @@
   game.start();
   // // });
   window.addEventListener('resize', () => {
-    game.resize('bg');
     if (document.getElementById('popUp')) {
       game.resize('popUp');
+    }
+    if (document.getElementById('bg')) {
+      game.resize('bg');
     }
   });
 }
