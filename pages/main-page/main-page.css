@@ -33,12 +33,6 @@
   z-index: 2;
 }
 
-/* .room__bg {
-  position: relative;
-  width: fit-content;
-  height: 100vh;
-} */
-
 .room__bg-img {
   position: absolute;
   transition: transform 1s ease-out;
@@ -62,7 +56,17 @@
   transition: transform .3s;
 }
 
-.room__img:hover {
+.room__spilledCoffee {
+  position: absolute;
+  opacity: 0;
+  transition: opacity .5s;
+}
+
+.room__img_id_coffee {
+  transition: opacity .5s;
+}
+
+.room__img_type_active:hover {
   transform: scale(1.15);
 }
 

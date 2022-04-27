@@ -31,9 +31,9 @@ function renderNewState() {
 }
 
 function loadScriptAsync(url) {
-  var s = document.createElement("script");
-  s.src = url;
-  document.getElementsByTagName("head")[0].appendChild(s);
+  var script = document.createElement("script");
+  script.src = url;
+  document.getElementsByTagName("head")[0].appendChild(script);
 }
 
 function switchToState(state) {

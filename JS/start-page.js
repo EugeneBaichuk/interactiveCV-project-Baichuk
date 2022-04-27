@@ -1,7 +1,6 @@
 'use strict';
 
 (function startPageStart(container) {
-  container = document.getElementById('start-wrapper');
   container.innerHTML = `
     <section class="start-page">
     <div class="start-page__item">
