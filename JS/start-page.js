@@ -1,6 +1,6 @@
 'use strict';
 
-(function startPageStart(container) {
+function startPageStart(container) {
   container.innerHTML = `
     <section class="start-page">
     <div class="start-page__item">
@@ -29,4 +29,4 @@
     e.preventDefault();
     switchToMain();
   });
-})(startWrapper);
+};

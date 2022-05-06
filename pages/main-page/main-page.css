@@ -70,6 +70,10 @@
   transform: scale(1.15);
 }
 
+.room__img_type_character {
+  background-color: green;
+}
+
 .person__img {
   position: absolute;
   width: 150px;
