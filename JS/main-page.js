@@ -24,6 +24,7 @@ const game = {
       speedX: 0,
       speedY: 0,
       req: null,
+      disabled: true,
       initPlayer() {
         this.createPlayer();
         this.movePlayer();
@@ -65,10 +66,10 @@ const game = {
       },
       createBorders() {
         const room = this.containerObj;
-        const borderRight = (3 / 5 * this.left + 0.135 * room.offsetHeight);
-        const borderLeft = (3 / 4.9 * this.left + 0.52 * room.offsetHeight);
-        const borderTop = (-3 / 4.9 * this.left + 0.62 * room.offsetHeight);
-        const borderBottom = (-3 / 4.9 * this.left + 0.95 * room.offsetHeight);
+        const borderRight = (3 / 5 * this.left + 0.135 * room.offsetHeight / this.heightIndex);
+        const borderLeft = (3 / 4.9 * this.left + 0.52 * room.offsetHeight / this.heightIndex);
+        const borderTop = (-3 / 4.9 * this.left + 0.62 * room.offsetHeight / this.heightIndex);
+        const borderBottom = (-3 / 4.9 * this.left + 0.95 * room.offsetHeight / this.heightIndex);
         this.createBorder((this.top <= borderRight), (borderRight - this.speedY), -this.speedX);
         this.createBorder((this.top > borderLeft), (borderLeft + this.speedY), -this.speedX);
         this.createBorder((this.top < borderTop), (borderTop + this.speedY), -this.speedX);
@@ -85,8 +86,8 @@ const game = {
         this.top += this.speedY;
         this.left += this.speedX;
         this.createBorders();
-        player.style.top = this.top + 'px';
-        player.style.left = this.left + 'px';
+        player.style.top = (this.top * this.heightIndex) + 'px';
+        player.style.left = (this.left * this.heightIndex) + 'px';
         player.style.width = (this.width * this.widthIndex) + 'px';
         player.style.height = (this.height * this.heightIndex) + 'px';
         this.changeTextAndPopupsbyPlayer();
@@ -96,39 +97,118 @@ const game = {
         });
       },
       changeSpeed(speedX, speedY) {
-        this.speedX = speedX * this.widthIndex;
-        this.speedY = speedY * this.heightIndex;
+        this.speedX = speedX;
+        this.speedY = speedY;
       },
       changeTextAndPopupsbyPlayer() {
         game.pageObjs.objs.forEach(item => {
-          this.change(item, 'hobby', 100, 30);
-          this.change(item, 'photo', 100, 150);
-
+          this.changeTop(item, 'hobby', 0.09 * this.widthIndex, 0.9 * this.heightIndex);
+          this.changeTop(item, 'photo', 0.45 * this.widthIndex, 0.65 * this.heightIndex);
+          this.changeTop(item, 'pc', 0.75 * this.widthIndex, 0.974 * this.heightIndex);
+          this.changeTop(item, 'hard-shelf', 1.15 * this.widthIndex, 0.575 * this.heightIndex);
+          this.changeRight(item, 'coffee', 1.3 * this.widthIndex, 1.1 * this.heightIndex);
+          this.changeRight(item, 'certificate', 1.3 * this.widthIndex, 0.55 * this.heightIndex);
+          this.changeRight(item, 'learn-shelf', 1 * this.widthIndex, 0.75 * this.heightIndex);
+          this.changeRight(item, 'books', 1.1 * this.widthIndex, 0.5 * this.heightIndex);
+          this.changeBot(item, 'workbook', 1.1 * this.widthIndex, 1.3 * this.heightIndex);
+          this.changeBot(item, 'mobile', 1.3 * this.widthIndex, 1.3 * this.heightIndex);
         });
 
       },
-      change(item, itemName, leftNum, topNum) {
-        if (item === itemName && (document.getElementById(item).offsetTop >= this.top - topNum && document.getElementById(item).offsetLeft >= this.left - leftNum) && !game.interactiveObjs[itemName].disabled) {
+      changeTop(item, itemName, leftNum, topNum) {
+        if (item === itemName && (document.getElementById(item).offsetTop >= this.top * topNum && document.getElementById(item).offsetLeft >= this.left * leftNum) && !game.interactiveObjs[itemName].disabled) {
           const itemObj = document.getElementById(item);
           itemObj.classList.add('room__img_type_js-active');
+
           addEventListener('keydown', (e) => {
-            if (e.code === 'Enter') {
-              if (item === itemName && (document.getElementById(item).offsetTop >= this.top - topNum && document.getElementById(item).offsetLeft >= this.left - leftNum)) {
-                game.changeTextAndPopups(item)
-              }
-              //this.active = false;
-              //console.log(document.getElementById(item).offsetTop);
-              console.log((item === itemName && (document.getElementById(item).offsetTop >= this.top * 0.85 && document.getElementById(item).offsetLeft >= this.left - leftNum)));
-              //console.log((item === itemName && (document.getElementById(item).offsetTop >= this.top - topNum && document.getElementById(item).offsetLeft >= this.left - leftNum)));
+            if (e.code === 'Enter' && item === itemName && document.getElementById(item).offsetTop >= this.top * topNum && document.getElementById(item).offsetLeft >= this.left * leftNum && this.active && game.popupClosed) {
+              game.changeTextAndPopups(item);
             }
-          })
+          });
+
+          document.addEventListener('keydown', (e) => {
+            if (!game.popupClosed && (e.code === "Enter" || e.code === "Escape")) {
+              game.pageObjs.text.innerHTML = game.text.closeBtnText;
+              game.interactiveObjs.closeBtn.counter += 1;
+              console.log(game.interactiveObjs.closeBtn.counter);
+              game.closePopup();
+              game.showFinal();
+            }
+            //this.active = false;
+          });
         }
-        if (item === itemName && (document.getElementById(item).offsetLeft < this.left - leftNum || document.getElementById(item).offsetTop < this.top - topNum)) {
+        if (item === itemName && (document.getElementById(item).offsetLeft < this.left * leftNum || document.getElementById(item).offsetTop < this.top * topNum)) {
           const itemObj = document.getElementById(item);
           itemObj.classList.remove('room__img_type_js-active');
         }
+      },
+      changeRight(item, itemName, leftNum, topNum) {
+        if (item === itemName && (document.getElementById(item).offsetTop >= this.top * topNum && document.getElementById(item).offsetLeft <= this.left * leftNum) && !game.interactiveObjs[itemName].disabled) {
+          const itemObj = document.getElementById(item);
+          itemObj.classList.add('room__img_type_js-active');
 
-      }
+          addEventListener('keydown', (e) => {
+            if (e.code === 'Enter') {
+              if (item === itemName && document.getElementById(item).offsetTop >= this.top * topNum && document.getElementById(item).offsetLeft <= this.left * leftNum) {
+                game.changeTextAndPopups(item);
+              }
+            }
+          });
+
+          document.addEventListener('keydown', (e) => {
+            if (!game.popupClosed && (e.code === "Enter" || e.code === "Escape")) {
+              game.pageObjs.text.innerHTML = game.text.closeBtnText;
+              game.interactiveObjs.closeBtn.counter += 1;
+              console.log(game.interactiveObjs.closeBtn.counter);
+              game.closePopup();
+              game.showFinal();
+            }
+            //this.active = false;
+          });
+        }
+        if (item === itemName && (document.getElementById(item).offsetLeft > this.left * leftNum || document.getElementById(item).offsetTop < this.top * topNum)) {
+          const itemObj = document.getElementById(item);
+          itemObj.classList.remove('room__img_type_js-active');
+        }
+      },
+      changeBot(item, itemName, leftNum, topNum) {
+        if (item === itemName && (document.getElementById(item).offsetTop <= this.top * topNum && document.getElementById(item).offsetLeft <= this.left * leftNum) && !game.interactiveObjs[itemName].disabled) {
+          const itemObj = document.getElementById(item);
+          itemObj.classList.add('room__img_type_js-active');
+
+          addEventListener('keydown', (e) => {
+            if (e.code === 'Enter') {
+              if (item === itemName && document.getElementById(item).offsetTop <= this.top * topNum && document.getElementById(item).offsetLeft <= this.left * leftNum) {
+
+                game.changeTextAndPopups(item);
+              }
+            }
+          });
+
+          document.addEventListener('keydown', (e) => {
+            if (!game.popupClosed && (e.code === "Enter" || e.code === "Escape")) {
+              game.pageObjs.text.innerHTML = game.text.closeBtnText;
+              game.interactiveObjs.closeBtn.counter += 1;
+              console.log(game.interactiveObjs.closeBtn.counter);
+              game.closePopup();
+              game.showFinal();
+            }
+            //this.active = false;
+          });
+        }
+
+        if (item === itemName && (document.getElementById(item).offsetLeft > this.left * leftNum || document.getElementById(item).offsetTop > this.top * topNum)) {
+          const itemObj = document.getElementById(item);
+          itemObj.classList.remove('room__img_type_js-active');
+        }
+      },
+    },
+    'front-shelf': {
+      width: 160,
+      height: 160,
+      top: 682,
+      left: 450,
+      disabled: true,
     },
     'hobby': {
       width: 203.78,
@@ -183,8 +263,8 @@ const game = {
     'books': {
       width: 47.19,
       height: 41.94,
-      top: 532.43,
-      left: 598.9,
+      top: 552.43,
+      left: 630,
       disabled: false,
     },
     'mobile': {
@@ -235,23 +315,23 @@ const game = {
     mobileText: 'We have found some of his contact details and usefull links.<br><br> His name is Eugene. Hi, Eugene!',
     closeBtnText: 'Let\'s try to interact with other objects',
   },
-
+  popupClosed: true,
   start() {
-    this.init(startWrapper);
-
+    this.init();
     this.resize('bg', this.bg);
     this.addResizeEvent();
     this.initPageContainers();
     this.changeTextAndPopupsEvent();
     this.interactiveObjs.player.initPlayer();
   },
-  init(container) {
-    container = document.getElementById('start-wrapper');
-    container.innerHTML = `
+  init() {
+    const startWrapper = document.getElementById('start-wrapper');
+    startWrapper.innerHTML = `
       <div class='main-container' id='container'>
         <section id="roomContainer" class="room">
           <div id="room" class="room__position">
             <div id="view">
+              <img id="front-shelf" class = "room__img room__img_type_front" src="pages/main-page/img/front-shelf.svg" alt="">
               <img class="room__bg-img" id="bg" src="pages/main-page/img/room.svg" alt="room">
               <img id="books" class="room__img room__img_type_active" src="pages/main-page/img/books.svg" alt="">
               <img id="certificate" class="room__img room__img_type_active" src="pages/main-page/img/certificate.svg" alt="">
@@ -259,10 +339,10 @@ const game = {
               <img id="hard-shelf" class="room__img room__img_type_active" src="pages/main-page/img/hard-shelf.svg" alt="">
               <img id="hobby" class="room__img room__img_type_active" src="pages/main-page/img/hobby.svg" alt="">
               <img id="learn-shelf" class="room__img room__img_type_active" src="pages/main-page/img/lern-shelf.svg" alt="">
-              <img id="mobile" class="room__img room__img_type_active" src="pages/main-page/img/mobile.svg" alt="">
+              <img id="mobile" class="room__img room__img_type_active room__img_type_front" src="pages/main-page/img/mobile.svg" alt="">
               <img id="pc" class="room__img room__img_type_active" src="pages/main-page/img/pc.svg" alt="">
               <img id="photo" class="room__img room__img_type_active" src="pages/main-page/img/photo.svg" alt="">
-              <img id="workbook" class="room__img room__img_type_active" src="pages/main-page/img/workbook.svg" alt="">
+              <img id="workbook" class="room__img room__img_type_active room__img_type_front" src="pages/main-page/img/workbook.svg" alt="">
             </div>
             <div id="popUpContainer"></div>   
           </div> 
@@ -274,9 +354,6 @@ const game = {
       </div>
       `;
   },
-  log() {
-    console.log(this.text.helloText)
-  },
   addResizeEvent() {
     window.addEventListener('resize', () => {
       if (document.getElementById('popUp')) {
@@ -286,9 +363,6 @@ const game = {
         this.resize('bg', this.bg);
       }
     });
-  },
-  resizeEventCB() {
-
   },
   resize(bgId, bg) {
     const room = document.getElementById('room');
@@ -346,7 +420,7 @@ const game = {
     this.pageObjs.roomContainer.addEventListener('click', (e) => {
       this.pageObjs.objs.forEach(item => {
         if (e.target.id === item) {
-          this.changeTextAndPopups(item)
+          game.changeTextAndPopups(item);
         }
       });
     });
@@ -354,16 +428,15 @@ const game = {
   changeTextAndPopups(item) {
     if (!this.interactiveObjs[item].disabled) {
       this.pageObjs.text.innerHTML = this.text[`${item}Text`];
-    } else if (item === 'closeBtn') {
-      this.pageObjs.text.innerHTML = this.text[`${item}Text`];
-      this.interactiveObjs[item].counter += 1;
-      if (this.interactiveObjs[item].counter >= 9) {
-        setTimeout(() => {
-          alert('Thank You. Now you know some more info about Me. I would be happy   to continue communication with you personally');
-        }, 1000);
-      }
     }
-    if (item !== 'coffee' && !this.interactiveObjs[item].disabled) {
+    if (item === 'closeBtn') {
+      game.interactiveObjs[item].counter += 1;
+      this.closePopup(item);
+      this.pageObjs.text.innerHTML = this.text[`${item}Text`];
+      this.showFinal(item);
+    }
+    if (item !== 'coffee' && !this.interactiveObjs[item].disabled && this.popupClosed) {
+      this.popupClosed = false;
       this.interactiveObjs[item].disabled = true;
       this.pageObjs.popUpContainer.innerHTML = `
               <img id="closeBtn" class="room__close-btn" src="pages/main-page/img/pop-ups/close-btn.svg" alt="pc-popUp">
@@ -380,16 +453,7 @@ const game = {
         popUpBg.style.background = 'rgba(0,46,136,0.5)';
       }, '0');
       this.resize('popUp', this.bg);
-    } else if (item === 'closeBtn') {
-      const popUpBg = document.querySelector('.room__bg');
-      const popUp = document.getElementById('popUp');
-      popUp.style.transform = 'translateX(-200%)';
-      popUpBg.style.background = 'rgba(0,46,136,0)';
-      document.getElementById('closeBtn').style.display = 'none';
-      setTimeout(() => {
-        this.pageObjs.popUpContainer.innerHTML = '';
-        this.pageObjs.roomContainer.removeChild(popUpBg);
-      }, '1000');
+
     } else if (item === 'coffee' && !this.interactiveObjs[item].disabled) {
       this.interactiveObjs[item].disabled = true;
       const view = document.getElementById('view');
@@ -400,5 +464,27 @@ const game = {
       this.resize('spilledCoffee', this.bg);
       document.getElementById('spilledCoffee').style.opacity = 1;
     }
+  },
+  showFinal() {
+    if (this.interactiveObjs.closeBtn.counter >= 9) {
+      setTimeout(() => {
+        alert('Thank You. Now you know some more info about Me. I would be happy to continue communication with you personally');
+      }, 1000);
+    }
+  },
+  closePopup() {
+    this.popupClosed = true;
+    this.interactiveObjs.player.active = true;
+    const popUpBg = document.querySelector('.room__bg');
+    const popUp = document.getElementById('popUp');
+    popUp.style.transform = 'translateX(-200%)';
+    popUpBg.style.background = 'rgba(0,46,136,0)';
+    document.getElementById('closeBtn').style.display = 'none';
+
+
+    setTimeout(() => {
+      this.pageObjs.popUpContainer.innerHTML = '';
+      this.pageObjs.roomContainer.removeChild(popUpBg);
+    }, '1000');
   }
 };
