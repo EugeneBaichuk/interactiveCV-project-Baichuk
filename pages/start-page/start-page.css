@@ -16,8 +16,9 @@
 
 .start-page__person {
   position: absolute;
-  top: 340px;
-  right: 20px;
+  top: 440px;
+  right: 50px;
+  width: 300px;
 }
 
 .start-page__item{

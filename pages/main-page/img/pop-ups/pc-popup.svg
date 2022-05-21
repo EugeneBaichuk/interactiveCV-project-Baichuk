@@ -14,12 +14,12 @@
 <circle cx="392.408" cy="609.234" r="0.5533" fill="white"/>
 <circle cx="408.076" cy="609.234" r="0.5533" fill="white"/>
 </g>
-<rect x="16.3153" y="150.588" width="768.37" height="401.665" fill="white"/>
+<rect id='pcActive' class='pc-popup-active' x="16.3153" y="150.588" width="768.37" height="401.665" fill="white"/>
 </g>
 <rect y="645" width="798" height="44" fill="#383851"/>
 <defs>
 <clipPath id="clip0_106_8">
-<rect width="801" height="511.987" fill="white" transform="translate(0 135.051)"/>
+<rect width="801" height="511.987" fill="blue" transform="translate(0 135.051)"/>
 </clipPath>
 <clipPath id="clip1_106_8">
 <rect width="34.5812" height="41.8615" fill="white" transform="translate(383.209 597.407)"/>
