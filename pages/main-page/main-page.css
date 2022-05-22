@@ -5,9 +5,13 @@
 }
 
 .room {
-  width: 100%;
-  height: 100%;
+  width: 95%;
+  height: 95%;
+  margin: auto;
+  display: flex;
+  align-items: center;
 }
+
 .audio {
   display: none;
 }
@@ -107,7 +111,7 @@
 
 @media (max-width: 1000px) {
   .room {
-    height: 70%;
+    height: 65%;
   }
 
   .main-container {
