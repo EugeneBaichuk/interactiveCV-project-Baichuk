@@ -1,0 +1,17 @@
+.cv {
+  display: block;
+  width: 80%;
+  margin: 1rem auto;
+  box-shadow: 5px 10px 29px rgba(0, 0, 0, 0.08);
+} 
+
+.button__type_cv {
+  display: block;
+  padding: 1rem;
+  width: 200px;
+  margin: 2rem auto;
+}
+
+.a {
+  fill: yellow;
+}

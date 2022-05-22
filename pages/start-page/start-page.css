@@ -31,12 +31,9 @@
 }
 
 .button {
-  position: absolute;
-  top: 105%;
-  left: calc(50% - 11rem);
-  padding: 1rem 6.5rem;
+  padding: 1rem .5rem;
   margin: 0;
-  max-width: 22rem;
+  width: 250px;
   border: none;
   border-radius: 15px;
   box-shadow:
@@ -44,7 +41,7 @@
     0 0.1em 0.25em rgba(0, 0, 0, .08);
   background: #1517A3;
   color: white;
-  font-size: 1rem;
+  font-size: .8rem;
   font-weight: 600;
   text-align: center;
   text-transform: uppercase;
@@ -54,6 +51,20 @@
   will-change: transform;
   transition: transform 0.2s .15s ease;
   cursor: pointer;
+}
+
+.button__type_cv-page {
+  position: absolute;
+  top: 105%;
+  left: calc(50% - 11rem);
+
+}
+
+.button__type_skip-btn {
+  top: 116%;
+  background: white;
+  border: 2px solid #1517A3;
+  color: #1517A3;
 }
 
 .button:hover {

@@ -19,7 +19,8 @@ function startPageStart(container) {
           <img src="pages/start-page/img/enter-key.svg" alt="enter-key" class="start-page__sprites start-page__sprites_type_enter">
         </div> 
       </div> 
-      <a id="start-btn" class="button" href="#">Continue</a> 
+      <a id="start-btn" class="button button__type_cv-page" href="#"> Start Quest</a> 
+      <a id="skip-btn" class="button button__type_cv-page button__type_skip-btn" href="#"> Skip quest and show CV</a> 
       <img class="start-page__corner" src="pages/start-page/img/corner.svg" alt="corner">
     </div> 
     <img class="start-page__person" src="pages/start-page/img/start-head.svg" alt="head.img">
@@ -28,5 +29,9 @@ function startPageStart(container) {
   document.getElementById('start-btn').addEventListener('click', (e) => {
     e.preventDefault();
     switchToMain();
+  });
+  document.getElementById('skip-btn').addEventListener('click', (e) => {
+    e.preventDefault();
+    switchToCV();
   });
 };

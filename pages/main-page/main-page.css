@@ -109,6 +109,40 @@
   color: #1517A3;
 }
 
+.final {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,46,136,0.5);
+  z-index: 100;
+}
+
+.final__popup {
+  position: absolute;
+  background: white;
+  width: 50%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.final__text {
+  font-family: "Montserrat", sans-serif;
+  font-size: 1.5rem;
+  line-height: 150%;
+  color: #333333;
+  overflow-y: auto;
+  margin: 2rem 5rem;
+}
+
+.button__type_final {
+  display: block;
+  margin: 2rem auto;
+  font-size: 1rem;
+}
+
 @media (max-width: 1000px) {
   .room {
     height: 65%;
