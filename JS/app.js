@@ -1,5 +1,6 @@
 'use strict';
 
+let game = null;
 let startWrapper = document.getElementById('start-wrapper');
 renderNewState();
 
@@ -17,11 +18,15 @@ function renderNewState() {
 
   switch (state.page) {
     case 'start-page':
+      if (game) {
+        cancelAnimationFrame(game.player.animation);
+      }
       startPageStart(startWrapper);
       //loadScriptAsync("JS/start-page.js");
       break;
     case 'main-page':
-      loadScriptAsync("JS/main-page.js");
+      //loadScriptAsync("JS/main-page.js");
+      game = gameStart();
       game.start();
       break;
     case 'cv-page':

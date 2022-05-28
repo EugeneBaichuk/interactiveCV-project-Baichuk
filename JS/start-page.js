@@ -14,7 +14,7 @@ function startPageStart(container) {
           <img src="pages/start-page/img/generic-mouse.svg" alt="mouse" class="start-page__sprites start-page__sprites_type_mouse"> 
         </div> 
         <div class="start-page__text-pos">
-          <p class="start-page__text start-page__text_pos_changed"> To interact with objects <span class ="start-page__text_style_italic"> press: LMB or Enter. </span></p>
+          <p class="start-page__text start-page__text_pos_changed"> To interact with objects <span class ="start-page__italic-text"> press: LMB or Enter. </span></p>
           <img src="pages/start-page/img/mouse-left-click.svg" alt = "mouse-left-click" class="start-page__sprites start-page__sprites_type_left-btn">
           <img src="pages/start-page/img/enter-key.svg" alt="enter-key" class="start-page__sprites start-page__sprites_type_enter">
         </div> 

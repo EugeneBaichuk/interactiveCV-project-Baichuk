@@ -34,6 +34,9 @@
 
 .person {
   position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   width: 50vw;
   height: 100%;
   background-color: #F6F6F6;
@@ -87,8 +90,8 @@
 }
 
 .person__img {
-  position: absolute;
-  width: 150px;
+  align-self: flex-end;
+  position: relative;
   bottom: 20px;
   right: 20px;
 }
@@ -143,7 +146,7 @@
   font-size: 1rem;
 }
 
-@media (max-width: 1000px) {
+@media (max-width: 1150px) {
   .room {
     height: 65%;
   }
@@ -155,10 +158,10 @@
   .person {
     width: 100%;
     height: 30%;
+    flex-direction: row;
   }
 
   .person__img {
-    position: absolute;
     width: 150px;
     bottom: 50%;
     right: 20px;
@@ -166,9 +169,8 @@
   }
 
   .person__text {
-    margin: 20px 40px;
-    max-height: 65%;
-    width: 70%;
+    margin: 20px;
+    width: 65%;
     font-size: .9rem;
   }
 }
@@ -180,3 +182,67 @@
       font-size: .8rem;
   }
 }
+
+.pc-close-btn {
+  top: 3%;
+  right: 3%;
+  width: 4rem;
+  z-index: 200;
+}
+
+.pcScreen {
+  background: white;
+  margin: 2rem auto;
+  width: 90vw;
+  min-height: 90vh;
+  border: 2px solid gray;
+  opacity: 0;
+  transition: opacity 2s;
+}
+
+.pcScreen__inner {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom:0;
+  height: 30vw;
+  width: 30vw;
+  margin: auto;
+  border: 2px solid gray;
+}
+
+.start {
+  box-shadow: 0 0 20px rgba(59, 59, 59, 0.3) inset;
+  transition: box-shadow .5s;
+}
+
+.end {
+  box-shadow: none;
+  transition: box-shadow .5s;
+}
+
+.alarm {
+  border: 2px solid rgb(243, 9, 9);
+  box-shadow: 0 0 40px rgba(243, 9, 9, 0.5) inset;
+  transition: border .5s box-shadow .5s;
+}
+
+.pcScreen__img {
+  width: 10vw;
+  height: 10vw;
+  object-fit: cover;
+}
+
+.pcScreen__winner {
+  opacity: 0;
+  margin-top: 2rem;
+  text-align: center;
+  font-size: 2rem;
+  transition: 2s opacity;
+}
+
+.pcScreen__winner_type_active {
+  opacity: 1;
+}
+
