@@ -194,7 +194,7 @@
   background: white;
   margin: 2rem auto;
   width: 90vw;
-  min-height: 90vh;
+  min-height: 800px;
   border: 2px solid gray;
   opacity: 0;
   transition: opacity 2s;

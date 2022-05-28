@@ -1,7 +1,12 @@
-'use strict';
-
-function startPageStart(container) {
-  container.innerHTML = `
+export default class StartPageStart {
+  constructor(container, switchToMain, switchToCV) {
+    this.switchToMain = switchToMain;
+    this.switchToCV = switchToCV;
+    this.container = container;
+    this.start(container);
+  }
+  start(container) {
+    container.innerHTML = `
     <section class="start-page">
     <div class="start-page__item">
       <div class="start-page__text-block">
@@ -26,12 +31,13 @@ function startPageStart(container) {
     <img class="start-page__person" src="pages/start-page/img/start-head.svg" alt="head.img">
     </section>
     `;
-  document.getElementById('start-btn').addEventListener('click', (e) => {
-    e.preventDefault();
-    switchToMain();
-  });
-  document.getElementById('skip-btn').addEventListener('click', (e) => {
-    e.preventDefault();
-    switchToCV();
-  });
-};
+    document.getElementById('start-btn').addEventListener('click', (e) => {
+      e.preventDefault();
+      this.switchToMain();
+    });
+    document.getElementById('skip-btn').addEventListener('click', (e) => {
+      e.preventDefault();
+      this.switchToCV();
+    });
+  }
+}

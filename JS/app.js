@@ -1,9 +1,10 @@
-'use strict';
+import Game from '../JS/main-page.js';
+import StartPageStart from '../JS/start-page.js';
+import CvPageStart from '../JS/cv-page.js';
 
 let game = null;
 let startWrapper = document.getElementById('start-wrapper');
 renderNewState();
-
 window.onhashchange = renderNewState;
 
 function renderNewState() {
@@ -19,28 +20,18 @@ function renderNewState() {
   switch (state.page) {
     case 'start-page':
       if (game) {
-        cancelAnimationFrame(game.player.animation);
+        cancelAnimationFrame(game.animation);
       }
-      startPageStart(startWrapper);
-      //loadScriptAsync("JS/start-page.js");
+      new StartPageStart(startWrapper, switchToMain, switchToCV);
       break;
     case 'main-page':
-      //loadScriptAsync("JS/main-page.js");
-      game = gameStart();
-      game.start();
+      game = new Game(switchToCV);
       break;
     case 'cv-page':
-      cvPageStart(startWrapper);
+      new CvPageStart(switchToStart);
       break;
     case (state.page):
-      //game.startPopup(game.pageObjs.Objs, state.page, game.pageObjs.text, game.pageObjs.popUpContainer, game.pageObjs.roomContainer);
   }
-}
-
-function loadScriptAsync(url) {
-  var script = document.createElement("script");
-  script.src = url;
-  document.getElementsByTagName("head")[0].appendChild(script);
 }
 
 function switchToState(state) {
@@ -56,12 +47,6 @@ function switchToStart() {
 function switchToMain() {
   switchToState({
     page: 'main-page'
-  });
-}
-
-function switchToPopup(state) {
-  switchToState({
-    page: state
   });
 }
 
