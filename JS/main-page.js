@@ -467,17 +467,36 @@ export default class Game {
           this.activatePC();
         }, 1000);
       }
+      //здесь использовал promise вместо setTimeout 0
       document.getElementById(item).classList.remove('room__img_type_active');
       const popUp = document.getElementById('popUp');
       const popUpBg = document.createElement('div');
-      popUpBg.classList.add('room__bg');
-      popUpBg.id = 'popupBg';
-      this.pageObjs.roomContainer.appendChild(popUpBg);
-      setTimeout(() => {
+
+      const promise = new Promise((resolve, reject) => {
+        popUpBg.classList.add('room__bg');
+        popUpBg.id = 'popupBg';
+        this.pageObjs.roomContainer.appendChild(popUpBg);
+        resolve('Done');
+        return promise;
+      });
+
+      promise.then(() => {
         popUp.style.transform = 'translateX(0)';
         popUp.style.zIndex = '50';
         popUpBg.style.background = 'rgba(0,46,136,0.5)';
-      }, '0');
+      });
+      // document.getElementById(item).classList.remove('room__img_type_active');
+      // const popUp = document.getElementById('popUp');
+      // const popUpBg = document.createElement('div');
+      // popUpBg.classList.add('room__bg');
+      // popUpBg.id = 'popupBg';
+      // this.pageObjs.roomContainer.appendChild(popUpBg);
+
+      // setTimeout(() => {
+      //   popUp.style.transform = 'translateX(0)';
+      //   popUp.style.zIndex = '50';
+      //   popUpBg.style.background = 'rgba(0,46,136,0.5)';
+      // }, 0);
       this.resize('popUp', this.bg);
 
     } else if (item === 'coffee' && !this.interactiveObjs[item].disabled) {
@@ -494,20 +513,11 @@ export default class Game {
   }
   activatePC() {
     const svgObject = document.querySelector('.pcPopup').contentDocument;
-    const rect = svgObject.getElementById('pcActive');
-    const svgText = svgObject.getElementById('screenText');
-    this.addSvgListener(rect, rect, svgText);
-    this.addSvgListener(svgText, rect, svgText);
-  }
-  addSvgListener(elem, rect, svgText) {
-    elem.addEventListener('click', () => {
-      if (!this.pcScreenActive) {
-        this.pcScreenActive = true;
-        rect.setAttribute("fill", "blue");
-        svgText.remove();
-        setTimeout(() => {
-          const final = document.createElement('div');
-          final.innerHTML = `
+    const PuzzleBtn = svgObject.getElementById('pcActive');
+    const PuzzleBtnText = svgObject.getElementById('textActive');
+    const drinksBtn = svgObject.getElementById('drinksActive');
+    const drinksBtnText = svgObject.getElementById('drinksActiveText');
+    const puzzleInnerHtml = `
         <div class="final">
           <div class ="pcScreen">
             <p class="pcScreen__winner">Puzzle Completed</p>
@@ -525,17 +535,45 @@ export default class Game {
           </div> 
         </div>
         `;
+    const drinksInnerHtml = `
+    <div class="final">
+      <div class= "drinks-container pcScreen__inner">
+        <div class="manage-drinks">
+          <input id='addDrinkBtn' class="manage-drinks__input" type='button' value='Add a new drink'>
+          <input id='showDrinkInfo' class="manage-drinks__input" type='button' value="Show drink's description">
+          <input id='deleteDrinkBtn' class="manage-drinks__input" type='button' value='Delete a drink'>
+          <input id='showDrinksMenuBtn' class="manage-drinks__input" type='button' value="Show drink's menu">
+          <div id="message" class="drink-info"></div>
+          <img id="closeBtn" class="room__close-btn pc-close-btn" src="pages/main-page/img/pop-ups/close-btn.svg" alt="pc-popUp">
+        </div>
+      </div> 
+    </div>   
+    `;
+    this.addSvgListener(PuzzleBtn, PuzzleBtn, puzzleInnerHtml, this.pcPopupPuzzleMinigameStart, '.pcScreen');
+    this.addSvgListener(PuzzleBtnText, PuzzleBtn, puzzleInnerHtml, this.pcPopupPuzzleMinigameStart, '.pcScreen');
+    this.addSvgListener(drinksBtn, drinksBtn, drinksInnerHtml, this.pcPopupDrinksMinigameStart, '.drinks-container');
+    this.addSvgListener(drinksBtnText, drinksBtn, drinksInnerHtml, this.pcPopupDrinksMinigameStart, '.drinks-container');
+  }
+  addSvgListener(elem, rect, innerHTML, gameStart, selector) {
+    elem.addEventListener('click', () => {
+      if (!this.pcScreenActive) {
+        //this.pcScreenActive = true;
+        rect.setAttribute("fill", "#EDEDED");
+        setTimeout(() => {
+          const final = document.createElement('div');
+          final.innerHTML = innerHTML;
+          rect.setAttribute("fill", "white");
           document.getElementById('start-wrapper').appendChild(final);
-          this.pcPopupMinigameStart();
+          gameStart();
           setTimeout(() => {
-            document.querySelector('.pcScreen').style.opacity = 1;
+            document.querySelector(selector).style.opacity = 1;
           }, 0);
           this.pcPopupMinigameClose(final);
         }, 1000);
       }
     });
   }
-  pcPopupMinigameStart() {
+  pcPopupPuzzleMinigameStart() {
     var container = document.querySelector('.pcScreen');
     container.style.position = 'relative';
     var imgs = document.querySelectorAll('.pcScreen__img');
@@ -655,6 +693,238 @@ export default class Game {
       this.classList.add('end');
     });
   }
+  pcPopupDrinksMinigameStart() {
+    var drinkStorage = new THashStorage();
+    addEventHandler('addDrinkBtn', addDrink);
+    addEventHandler('showDrinkInfo', showDrinkInfo);
+    addEventHandler('deleteDrinkBtn', removeDrink);
+    addEventHandler('showDrinksMenuBtn', showDrinksMenu);
+
+    function addEventHandler(id, btnsFunction) {
+      document.getElementById(id).addEventListener('click', () => {
+        btnsFunction();
+      });
+    }
+
+    function addDrink() {
+      var drinkName = prompt('Enter drink\'s name', 'New Drink');
+      var fHash = {};
+
+      if (drinkName) {
+        drinkName.toLowerCase().trim();
+        fHash.recipe = prompt('Enter drink\'s description', 'Description');
+        fHash.alcohol = confirm('Is your drink alcohol?') ? 'yes' : 'no';
+        return drinkStorage.addValue(drinkName, fHash);
+      } else {
+        alert('Declined!')
+      }
+    }
+
+    function showDrinkInfo() {
+      var drinkName = prompt('Enter drink\'s name', '');
+      if (drinkName) {
+        drinkName.toLowerCase().trim();
+      }
+      var getDrinkInfo = (drinkName) ? drinkStorage.getValue(drinkName) : 0;
+      var resultHTML = '';
+
+      if (getDrinkInfo) {
+        var print1 = 'Drink: ' + drinkName + '<br>';
+        var print2 = 'Alcohol: ' + getDrinkInfo.alcohol + '<br>';
+        var print3 = 'Description: ' + getDrinkInfo.recipe + '<br>';
+
+        resultHTML = print1 + print2 + print3;
+      } else {
+        resultHTML = 'Error! There is no such a drink';
+      }
+      document.getElementById('message').innerHTML = resultHTML;
+    }
+
+    function removeDrink() {
+      var drinkName = prompt('Which drink would you like to delete?');
+      var resultHTML = '';
+
+      if (drinkName) {
+        drinkName.toLowerCase().trim();
+      }
+
+      //var delDrinkInfo = drinkStorage.deleteValue(drinkName);
+      let delDrinkInfo = drinkStorage.deleteData(drinkName);
+
+      if (delDrinkInfo && drinkName !== null) {
+        resultHTML = 'Drink\'s info ' + drinkName + ' deleted';
+      } else {
+        resultHTML = 'Error! There is no such a drink';
+      }
+      document.getElementById('message').innerHTML = resultHTML;
+    }
+
+    function showDrinksMenu() {
+      var showMenuInfo = drinkStorage.getKeys();
+      var resultHTML = '';
+
+      if (showMenuInfo.length) {
+        for (var i = 0; i < showMenuInfo.length; i++) {
+          resultHTML += (i + 1) + '. ' + showMenuInfo[i] + '<br>';
+        }
+      } else {
+        resultHTML = 'No records in menu';
+      }
+      document.getElementById('message').innerHTML = resultHTML;
+    }
+
+    function THashStorage() {
+      var AjaxHandlerScript = "http://fe.it-academy.by/AjaxStringStorage2.php";
+      var self = this;
+      var password = null;
+      var pHash = {};
+
+      self.addValue = function (key, value) {
+        self.value = value;
+        self.key = key;
+        self.getAjaxString();
+      };
+
+      self.getValue = function (key) {
+        return pHash[key];
+      };
+
+      self.deleteValue = function (key) {
+        var del = delete pHash[key];
+        self.lockgetAjaxString();
+        return del;
+      };
+
+      self.getKeys = function () {
+        return (Object.keys(pHash));
+      };
+
+      //fetch is used here
+      function sendHttpRequest(method, url, data) {
+        return fetch(url, {
+          method: method,
+          body: data
+        }).then(response => {
+          self.lockgetReady(response);
+          return response.json();
+        });
+      }
+
+      self.deleteData = async function (key) {
+        delete pHash[key];
+        password = Math.random();
+
+        const fd = new FormData();
+        fd.append('f', 'LOCKGET');
+        fd.append('n', 'BAICHUK_DRINKS');
+        fd.append('p', password);
+
+        await sendHttpRequest(
+          'POST',
+          AjaxHandlerScript,
+          fd
+        );
+      };
+
+      self.getAjaxString = function () {
+        $.ajax({
+          url: AjaxHandlerScript,
+          type: 'POST',
+          data: {
+            f: 'READ',
+            n: 'BAICHUK_DRINKS',
+          },
+          cache: false,
+          success: self.getReady,
+          error: self.errorHandler
+        });
+      };
+
+      self.readAjaxString = function () {
+        $.ajax({
+          url: AjaxHandlerScript,
+          type: 'POST',
+          data: {
+            f: 'READ',
+            n: 'BAICHUK_DRINKS',
+          },
+          cache: false,
+          error: self.errorHandler,
+          success: function (ResultH) {
+            if (ResultH.error != undefined) {
+              alert(ResultH.error);
+            } else {
+              pHash = JSON.parse(ResultH.result);
+            }
+          }
+        });
+      };
+
+      self.readAjaxString();
+
+      self.updateAjaxString = function () {
+        $.ajax({
+          url: AjaxHandlerScript,
+          type: 'POST',
+          data: {
+            f: 'UPDATE',
+            n: 'BAICHUK_DRINKS',
+            v: JSON.stringify(pHash),
+            p: password,
+          },
+          cache: false,
+          error: self.errorHandler,
+          success: function (ResultH) {
+            if (ResultH.error != undefined) {
+              alert(ResultH.error);
+            } else {
+              console.log(ResultH);
+              self.readAjaxString();
+            }
+          }
+        });
+      };
+
+      self.lockgetAjaxString = function () {
+        password = Math.random();
+
+        $.ajax({
+          url: AjaxHandlerScript,
+          type: 'POST',
+          data: {
+            f: 'LOCKGET',
+            n: 'BAICHUK_DRINKS',
+            p: password,
+          },
+          cache: false,
+          success: self.lockgetReady,
+          error: self.errorHandler
+        });
+      };
+
+      self.getReady = function (ResultH) {
+        if (ResultH.error != undefined) {
+          alert(ResultH.error);
+        } else {
+          pHash = JSON.parse(ResultH.result);
+          pHash[self.key] = self.value;
+          self.lockgetAjaxString();
+        }
+      };
+
+      self.lockgetReady = function (ResultH) {
+        if (ResultH.error != undefined) {
+          alert(ResultH.error);
+        } else {
+          self.updateAjaxString();
+        }
+      };
+
+      self.errorHandler = function (jqXHR, StatusStr, ErrorStr) {
+        alert(StatusStr + ' ' + ErrorStr);
+      };
+    }
+  }
   pcPopupMinigameClose(gameElem) {
     this.gameElem = gameElem;
     const closeBtn = document.querySelector('.pc-close-btn');
@@ -681,9 +951,9 @@ export default class Game {
         final.innerHTML = `
         <div class="final">
           <div class="final__popup">
-            <p class="final__text"> Dear friend.Thank You for your interest to my project</p>
+            <p class="final__text"> Dear friend. Thank You for your interest to my project</p>
             <p class="final__text"> Now you know some more info about Me and I would be happy to
-          continue communication with you personally.</p> <p class="final__text"> Please.Click the button below to see my full CV. </p>
+          continue communication with you personally.</p> <p class="final__text"> Please. Click the button below to see my full CV. </p>
             <a id="finalBtn" class="button button__type_final" href="#">Show full CV</a> 
           </div> 
         </div>
@@ -706,9 +976,9 @@ export default class Game {
     document.getElementById('closeBtn').style.display = 'none';
 
     setTimeout(() => {
-      this.pageObjs.popUpContainer.innerHTML = '';
       this.pageObjs.roomContainer.removeChild(popUpBg);
-    }, '1000');
+      this.pageObjs.popUpContainer.innerHTML = '';
+    }, 800);
   }
   get animation() {
     return this.player.animation;

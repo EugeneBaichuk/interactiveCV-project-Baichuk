@@ -1,12 +1,13 @@
 export default class StartPageStart {
   constructor(container, switchToMain, switchToCV) {
+    this.container = container;
     this.switchToMain = switchToMain;
     this.switchToCV = switchToCV;
     this.container = container;
     this.start(container);
   }
-  start(container) {
-    container.innerHTML = `
+  start() {
+    this.container.innerHTML = `
     <section class="start-page">
     <div class="start-page__item">
       <div class="start-page__text-block">
