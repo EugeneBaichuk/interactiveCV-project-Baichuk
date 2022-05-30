@@ -288,10 +288,10 @@ export default class Game {
         this.top += this.speedY;
         this.left += this.speedX;
         this.createBorders();
-        player.style.top = (this.top * this.heightIndex) + 'px';
-        player.style.left = (this.left * this.heightIndex) + 'px';
-        player.style.width = (this.width * this.widthIndex) + 'px';
-        player.style.height = (this.height * this.heightIndex) + 'px';
+        player.style.top = `${this.top * this.heightIndex}px`;
+        player.style.left = `${this.left * this.heightIndex}px`;
+        player.style.width = `${this.width * this.widthIndex}px`;
+        player.style.height = `${this.height * this.heightIndex}px`;
         this.changeTextAndPopupsbyPlayer(self);
 
         this.animation = requestAnimationFrame(() => {
@@ -412,10 +412,10 @@ export default class Game {
   setObjSizeAndPos(widthIndex, heightIndex, item) {
     let obj = document.getElementById(item);
     if (obj) {
-      obj.style.top = (this.interactiveObjs[item].top * heightIndex) + 'px';
-      obj.style.left = (this.interactiveObjs[item].left * widthIndex) + 'px';
-      obj.style.width = (this.interactiveObjs[item].width * widthIndex) + 'px';
-      obj.style.height = (this.interactiveObjs[item].height * heightIndex) + 'px';
+      obj.style.top = `${this.interactiveObjs[item].top * heightIndex}px`;
+      obj.style.left = `${this.interactiveObjs[item].left * widthIndex}px`;
+      obj.style.width = `${this.interactiveObjs[item].width * widthIndex}px`;
+      obj.style.height = `${this.interactiveObjs[item].height * heightIndex}px`;
     }
     this.player.heightIndex = heightIndex;
     this.player.widthIndex = widthIndex;
@@ -448,15 +448,15 @@ export default class Game {
 
       this.popupClosed = false;
       this.interactiveObjs[item].disabled = true;
-      if (item !== 'certificate' && item !== 'pc') {
+      if (item !== 'certificate' && item !== 'pc' && item !== 'photo') {
         this.pageObjs.popUpContainer.innerHTML = `
         <img id="closeBtn" class="room__close-btn" src="pages/main-page/img/pop-ups/close-btn.svg" alt="pc-popUp">
         <img id="popUp" class="room__bg-img room__popup" src="pages/main-page/img/pop-ups/${item}-popup.svg" alt="pc-popUp">
         `;
-      } else if (item === 'certificate') {
+      } else if (item === 'certificate' || item === 'photo') {
         this.pageObjs.popUpContainer.innerHTML = `
           <img id="closeBtn" class="room__close-btn" src="pages/main-page/img/pop-ups/close-btn.svg" alt="pc-popUp">
-          <img id="popUp" class="room__bg-img room__popup" src="pages/main-page/img/pop-ups/certificate-popup.png" alt="pc-popUp">
+          <img id="popUp" class="room__bg-img room__popup" src="pages/main-page/img/pop-ups/${item}-popup.png" alt="${item}-popUp">
           `;
       } else if (item === 'pc') {
         this.pageObjs.popUpContainer.innerHTML = `
@@ -467,11 +467,11 @@ export default class Game {
           this.activatePC();
         }, 1000);
       }
-      //здесь использовал promise вместо setTimeout 0
+
       document.getElementById(item).classList.remove('room__img_type_active');
       const popUp = document.getElementById('popUp');
       const popUpBg = document.createElement('div');
-
+      //здесь использовал promise вместо setTimeout 0
       const promise = new Promise((resolve, reject) => {
         popUpBg.classList.add('room__bg');
         popUpBg.id = 'popupBg';
@@ -479,7 +479,6 @@ export default class Game {
         resolve('Done');
         return promise;
       });
-
       promise.then(() => {
         popUp.style.transform = 'translateX(0)';
         popUp.style.zIndex = '50';
@@ -498,7 +497,6 @@ export default class Game {
       //   popUpBg.style.background = 'rgba(0,46,136,0.5)';
       // }, 0);
       this.resize('popUp', this.bg);
-
     } else if (item === 'coffee' && !this.interactiveObjs[item].disabled) {
       this.audio.coffee.play();
       this.interactiveObjs[item].disabled = true;
@@ -574,20 +572,19 @@ export default class Game {
     });
   }
   pcPopupPuzzleMinigameStart() {
-    var container = document.querySelector('.pcScreen');
+    const container = document.querySelector('.pcScreen');
     container.style.position = 'relative';
-    var imgs = document.querySelectorAll('.pcScreen__img');
-    //устанавливаем стартовое положение картинок
+    const imgs = document.querySelectorAll('.pcScreen__img');
     let counter = 0;
     const innerContainer = document.querySelector('.pcScreen__inner');
-    var xInside, yInside;
-    var img;
+    let xInside, yInside;
+    let img;
     container.addEventListener('mousedown', mouseDown, false);
 
     imgs.forEach((img) => {
       img.style.position = 'absolute';
-      img.style.left = (Math.floor(Math.random() * 320)) + 'px';
-      img.style.top = (Math.floor(Math.random() * 500)) + 'px';
+      img.style.left = `${Math.floor(Math.random() * 320)}px`;
+      img.style.top = `${Math.floor(Math.random() * 500)}px`;
     });
 
     function mouseDown(event) {
@@ -607,10 +604,10 @@ export default class Game {
       if (img.tagName === 'IMG') {
         event.preventDefault();
         // находим координаты клика внутри container и меняем положение img  
-        var insideContainerX = event.pageX - this.offsetLeft - xInside;
-        var insideContainerY = event.pageY - this.offsetTop - yInside;
-        img.style.left = insideContainerX + 'px';
-        img.style.top = insideContainerY + 'px';
+        const insideContainerX = event.pageX - this.offsetLeft - xInside;
+        const insideContainerY = event.pageY - this.offsetTop - yInside;
+        img.style.left = `${insideContainerX}px`;
+        img.style.top = `${insideContainerY}px`;
         //огр. область перемещения картинок размером контейнера + меняем border у контейнера на красный
         addAlarm(insideContainerX, insideContainerY, this);
       }
@@ -638,7 +635,7 @@ export default class Game {
         if (imgArr[key] === img) {
           if (key < 3 && sides.left >= sides.contLeft + (+key * img.offsetWidth - 30) && sides.right <= sides.contLeft + ((+key + 1) * img.offsetWidth + 30) && sides.bottom <= sides.contBottom - 2 * img.offsetWidth + 30 && sides.top >= sides.contTop) {
             img.disabled = true;
-            imgArr[key].style.top = `${sides.contTop + 1}px`;
+            imgArr[key].style.top = `${sides.contTop + 2}px`;
             imgArr[key].style.left = `${sides.contLeft + key*img.offsetWidth + 1}px`;
             counter += 1;
           } else if (key < 6 && (sides.left >= sides.contLeft + (+key - 3) * img.offsetWidth - 30) && sides.right <= sides.contLeft + ((+key - 2) * img.offsetWidth + 30) && sides.bottom <= sides.contBottom - img.offsetWidth + 30 && sides.top >= sides.contTop + img.offsetWidth - 30) {
@@ -671,12 +668,12 @@ export default class Game {
     }
 
     function makeLimits(limit, position, side, container) {
-      var heightLimit = container[limit] - img[limit];
+      const heightLimit = container[limit] - img[limit];
       if (position <= 0) {
         img.style[side] = 0 + 'px';
         container.classList.add('alarm');
       } else if (position >= heightLimit) {
-        img.style[side] = heightLimit + 'px';
+        img.style[side] = `${heightLimit}px`;
         container.classList.add('alarm');
       }
     }
@@ -694,7 +691,7 @@ export default class Game {
     });
   }
   pcPopupDrinksMinigameStart() {
-    var drinkStorage = new THashStorage();
+    const drinkStorage = new THashStorage();
     addEventHandler('addDrinkBtn', addDrink);
     addEventHandler('showDrinkInfo', showDrinkInfo);
     addEventHandler('deleteDrinkBtn', removeDrink);
@@ -707,8 +704,8 @@ export default class Game {
     }
 
     function addDrink() {
-      var drinkName = prompt('Enter drink\'s name', 'New Drink');
-      var fHash = {};
+      const drinkName = prompt('Enter drink\'s name', 'New Drink');
+      let fHash = {};
 
       if (drinkName) {
         drinkName.toLowerCase().trim();
@@ -721,17 +718,17 @@ export default class Game {
     }
 
     function showDrinkInfo() {
-      var drinkName = prompt('Enter drink\'s name', '');
+      let drinkName = prompt('Enter drink\'s name', '');
       if (drinkName) {
         drinkName.toLowerCase().trim();
       }
-      var getDrinkInfo = (drinkName) ? drinkStorage.getValue(drinkName) : 0;
-      var resultHTML = '';
+      const getDrinkInfo = (drinkName) ? drinkStorage.getValue(drinkName) : 0;
+      let resultHTML = '';
 
       if (getDrinkInfo) {
-        var print1 = 'Drink: ' + drinkName + '<br>';
-        var print2 = 'Alcohol: ' + getDrinkInfo.alcohol + '<br>';
-        var print3 = 'Description: ' + getDrinkInfo.recipe + '<br>';
+        const print1 = `Drink: ${drinkName}<br>`;
+        const print2 = `Alcohol: ${getDrinkInfo.alcohol}<br>`;
+        const print3 = `Description: ${getDrinkInfo.recipe}<br>`;
 
         resultHTML = print1 + print2 + print3;
       } else {
@@ -741,18 +738,18 @@ export default class Game {
     }
 
     function removeDrink() {
-      var drinkName = prompt('Which drink would you like to delete?');
-      var resultHTML = '';
+      let drinkName = prompt('Which drink would you like to delete?');
+      let resultHTML = '';
 
       if (drinkName) {
         drinkName.toLowerCase().trim();
       }
 
-      //var delDrinkInfo = drinkStorage.deleteValue(drinkName);
+      //let delDrinkInfo = drinkStorage.deleteValue(drinkName);
       let delDrinkInfo = drinkStorage.deleteData(drinkName);
 
       if (delDrinkInfo && drinkName !== null) {
-        resultHTML = 'Drink\'s info ' + drinkName + ' deleted';
+        resultHTML = `Drink\'s info ${drinkName} deleted`;
       } else {
         resultHTML = 'Error! There is no such a drink';
       }
@@ -760,12 +757,12 @@ export default class Game {
     }
 
     function showDrinksMenu() {
-      var showMenuInfo = drinkStorage.getKeys();
-      var resultHTML = '';
+      const showMenuInfo = drinkStorage.getKeys();
+      let resultHTML = '';
 
       if (showMenuInfo.length) {
-        for (var i = 0; i < showMenuInfo.length; i++) {
-          resultHTML += (i + 1) + '. ' + showMenuInfo[i] + '<br>';
+        for (let i = 0; i < showMenuInfo.length; i++) {
+          resultHTML += `${i + 1}. ${showMenuInfo[i]} <br>`;
         }
       } else {
         resultHTML = 'No records in menu';
@@ -774,10 +771,10 @@ export default class Game {
     }
 
     function THashStorage() {
-      var AjaxHandlerScript = "http://fe.it-academy.by/AjaxStringStorage2.php";
-      var self = this;
-      var password = null;
-      var pHash = {};
+      const AjaxHandlerScript = "http://fe.it-academy.by/AjaxStringStorage2.php";
+      const self = this;
+      let password = null;
+      let pHash = {};
 
       self.addValue = function (key, value) {
         self.value = value;
@@ -790,7 +787,7 @@ export default class Game {
       };
 
       self.deleteValue = function (key) {
-        var del = delete pHash[key];
+        const del = delete pHash[key];
         self.lockgetAjaxString();
         return del;
       };
@@ -921,16 +918,21 @@ export default class Game {
       };
 
       self.errorHandler = function (jqXHR, StatusStr, ErrorStr) {
-        alert(StatusStr + ' ' + ErrorStr);
+        alert(`${StatusStr} ${ErrorStr}`);
       };
     }
   }
   pcPopupMinigameClose(gameElem) {
     this.gameElem = gameElem;
     const closeBtn = document.querySelector('.pc-close-btn');
+    const background = document.querySelector('.final');
+
     closeBtn.addEventListener('click', () => {
       this.gameElem.remove();
     });
+    // background.addEventListener('click', () => {
+    //   this.gameElem.remove();
+    // });
   }
   closePopupByPlayer(self) {
     document.addEventListener('keydown', (e) => {

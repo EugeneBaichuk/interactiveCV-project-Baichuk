@@ -19,14 +19,14 @@
 .start-page__person {
   align-self: flex-end;
   position: relative;
-  top: 200px;
+  top: 150px;
   width: 400px;
 }
 
 .start-page__item {
   position: relative;
   width: 65%;
-  margin: 4rem;
+  margin: 2rem 4rem;
   background: #E9E9F0;
   border-radius: 50px;
   z-index: 2;
