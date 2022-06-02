@@ -59,6 +59,7 @@
   right: 2rem;
   top: 3.5rem;
   z-index: 60;
+  cursor: pointer;
 }
 
 .room__img {

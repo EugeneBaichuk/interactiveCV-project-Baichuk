@@ -477,7 +477,6 @@ export default class Game {
         popUpBg.id = 'popupBg';
         this.pageObjs.roomContainer.appendChild(popUpBg);
         resolve('Done');
-        return promise;
       });
       promise.then(() => {
         popUp.style.transform = 'translateX(0)';
@@ -713,7 +712,7 @@ export default class Game {
         fHash.alcohol = confirm('Is your drink alcohol?') ? 'yes' : 'no';
         return drinkStorage.addValue(drinkName, fHash);
       } else {
-        alert('Declined!')
+        alert('Declined!');
       }
     }
 
