@@ -1,6 +1,9 @@
 export default class Game {
-  constructor(switchToCV) {
+  constructor(switchToCV, images, personImgs, startPersonImg) {
     this.switchToCV = switchToCV;
+    this.personImgs = personImgs;
+    this.startPersonImg = startPersonImg;
+    this.images = images;
     this.pageObjs = {
       startWrapper: null,
       roomContainer: null,
@@ -64,18 +67,6 @@ export default class Game {
         <section id="roomContainer" class="room">
           <div id="room" class="room__position">
             <div id="view">
-              <img id="front-shelf" class = "room__img room__img_type_front" src="pages/main-page/img/front-shelf.svg" alt="">
-              <img class="room__bg-img" id="bg" src="pages/main-page/img/room.svg" alt="room">
-              <img id="books" class="room__img room__img_type_active" src="pages/main-page/img/books.svg" alt="">
-              <img id="certificate" class="room__img room__img_type_active" src="pages/main-page/img/certificate.svg" alt="">
-              <img id="coffee" class="room__img room__img_id_coffee room__img_type_active" src="pages/main-page/img/coffee.svg" alt="">
-              <img id="hard-shelf" class="room__img room__img_type_active" src="pages/main-page/img/hard-shelf.svg" alt="">
-              <img id="hobby" class="room__img room__img_type_active" src="pages/main-page/img/hobby.svg" alt="">
-              <img id="learn-shelf" class="room__img room__img_type_active" src="pages/main-page/img/lern-shelf.svg" alt="">
-              <img id="mobile" class="room__img room__img_type_active room__img_type_front" src="pages/main-page/img/mobile.svg" alt="">
-              <img src="pages/main-page/img/pc.svg" id="pc" class="room__img_type_active room__img" alt="">
-              <img id="photo" class="room__img room__img_type_active" src="pages/main-page/img/photo.svg" alt="">
-              <img id="workbook" class="room__img room__img_type_active room__img_type_front" src="pages/main-page/img/workbook.svg" alt="">
             </div>
             <div id="popUpContainer"></div>   
           </div> 
@@ -86,6 +77,12 @@ export default class Game {
         </section>
       </div>
       `;
+    
+    this.images.forEach((img, i) => {
+      let imgsContainer = document.getElementById("view");
+      imgsContainer.appendChild(this.images[i]);
+    });
+    
   }
   initPageContainers() {
     this.pageObjs.roomContainer = document.getElementById('roomContainer');
@@ -199,10 +196,11 @@ export default class Game {
     this.player = {
       audio: true,
       active: true,
+      playerImgs: this.personImgs,
+      startPlayerImg: this.startPersonImg,
       src: ['bot-right', 'bot-left', 'top-right', 'top-left'],
       heightIndex: null,
       widthIndex: null,
-
       playerObj: null,
       width: 100,
       height: 200,
@@ -218,11 +216,10 @@ export default class Game {
       },
       createPlayer() {
         this.containerObj = document.getElementById('room');
-        this.playerObj = document.createElement('img');
-        this.playerObj.src = `pages/main-page/img/player-${this.src[0]}.svg`;
-        this.playerObj.classList.add('room__img');
-        this.playerObj.id = 'player';
+        this.playerObj = this.startPlayerImg[0];
         this.containerObj.appendChild(this.playerObj);
+        
+        console.log();
       },
       movePlayer() {
         this.updateView(this.playerObj);
@@ -242,16 +239,17 @@ export default class Game {
             this.changeSpeed(speedX, speedY);
             switch (e.keyCode) {
               case 37:
-                this.playerObj.src = `pages/main-page/img/player-${this.src[1]}.svg`;
+                this.playerObj.src = this.playerImgs[1].src;
                 break;
               case 38:
-                this.playerObj.src = `pages/main-page/img/player-${this.src[2]}.svg`;
+                this.playerObj.src = this.playerImgs[2].src;
                 break;
               case 39:
-                this.playerObj.src = `pages/main-page/img/player-${this.src[3]}.svg`;
+                this.playerObj.src = this.playerImgs[3].src;
                 break;
               case 40:
-                this.playerObj.src = `pages/main-page/img/player-${this.src[0]}.svg`;
+                this.playerObj.src = this.playerImgs[0].src;
+                console.log(this.playerImgs[0].src);
                 break;
             }
           }
