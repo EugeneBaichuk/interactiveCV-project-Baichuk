@@ -158,7 +158,7 @@
   background: white;
   margin: 4rem auto;
   width: 80%;
-  height: 750px;
+  height: 90vh;
   border: 2px solid gray;
   opacity: 0;
   transition: opacity 2s;
@@ -204,6 +204,13 @@
   text-align: center;
   font-size: 2rem;
   transition: 2s opacity;
+}
+
+.pcScreen__text {
+  margin-top: 2rem;
+  text-align: center;
+  font-size: 2rem;
+  transition: 1s opacity;
 }
 
 .pcScreen__winner_type_active {

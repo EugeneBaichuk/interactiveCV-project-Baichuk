@@ -65,6 +65,8 @@ const activeImgProps = [
   },
 ];
 
+const cvProps = [];
+
 const playerImgProps = [
   {
     src:"pages/main-page/img/player-bot-right.svg",
@@ -108,6 +110,8 @@ function preloadImgs (props) {
 const activeImgs = preloadImgs(activeImgProps);
 const personImgs = preloadImgs(playerImgProps);
 const startPersonImg = preloadImgs(startPlayerImgProps);
+
+
 let game = null;
 let startWrapper = document.getElementById('start-wrapper');
 renderNewState();

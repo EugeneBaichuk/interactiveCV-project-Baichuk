@@ -46,7 +46,6 @@ export default class Game {
       guitar: new Audio('sounds/guitar.mp3'),
       coffee: new Audio('sounds/coffee.wav'),
     };
-
     this.start();
   }
   start() {
@@ -427,6 +426,7 @@ export default class Game {
       });
     });
   }
+
   changeTextAndPopups(item) {
     if (!this.interactiveObjs[item].disabled) {
       this.pageObjs.text.innerHTML = this.text[`${item}Text`];
@@ -481,18 +481,6 @@ export default class Game {
         popUp.style.zIndex = '50';
         popUpBg.style.background = 'rgba(0,46,136,0.5)';
       });
-      // document.getElementById(item).classList.remove('room__img_type_active');
-      // const popUp = document.getElementById('popUp');
-      // const popUpBg = document.createElement('div');
-      // popUpBg.classList.add('room__bg');
-      // popUpBg.id = 'popupBg';
-      // this.pageObjs.roomContainer.appendChild(popUpBg);
-
-      // setTimeout(() => {
-      //   popUp.style.transform = 'translateX(0)';
-      //   popUp.style.zIndex = '50';
-      //   popUpBg.style.background = 'rgba(0,46,136,0.5)';
-      // }, 0);
       this.resize('popUp', this.bg);
     } else if (item === 'coffee' && !this.interactiveObjs[item].disabled) {
       this.audio.coffee.play();
@@ -510,11 +498,9 @@ export default class Game {
     const svgObject = document.querySelector('.pcPopup').contentDocument;
     const PuzzleBtn = svgObject.getElementById('pcActive');
     const PuzzleBtnText = svgObject.getElementById('textActive');
-    const drinksBtn = svgObject.getElementById('drinksActive');
-    const drinksBtnText = svgObject.getElementById('drinksActiveText');
     const puzzleInnerHtml = `
         <div class="final">
-          <div class ="pcScreen">
+          <div class="pcScreen">
             <p class="pcScreen__winner">Puzzle Completed</p>
             <img class="pcScreen__img" src="pages/main-page/img/puzzle/part1.png">
             <img class="pcScreen__img" src="pages/main-page/img/puzzle/part2.png">
@@ -530,29 +516,12 @@ export default class Game {
           </div> 
         </div>
         `;
-    const drinksInnerHtml = `
-    <div class="final">
-      <div class= "drinks-container pcScreen__inner">
-        <div class="manage-drinks">
-          <input id='addDrinkBtn' class="manage-drinks__input" type='button' value='Add a new drink'>
-          <input id='showDrinkInfo' class="manage-drinks__input" type='button' value="Show drink's description">
-          <input id='deleteDrinkBtn' class="manage-drinks__input" type='button' value='Delete a drink'>
-          <input id='showDrinksMenuBtn' class="manage-drinks__input" type='button' value="Show drink's menu">
-          <div id="message" class="drink-info"></div>
-          <img id="closeBtn" class="room__close-btn pc-close-btn" src="pages/main-page/img/pop-ups/close-btn.svg" alt="pc-popUp">
-        </div>
-      </div> 
-    </div>   
-    `;
     this.addSvgListener(PuzzleBtn, PuzzleBtn, puzzleInnerHtml, this.pcPopupPuzzleMinigameStart, '.pcScreen');
     this.addSvgListener(PuzzleBtnText, PuzzleBtn, puzzleInnerHtml, this.pcPopupPuzzleMinigameStart, '.pcScreen');
-    this.addSvgListener(drinksBtn, drinksBtn, drinksInnerHtml, this.pcPopupDrinksMinigameStart, '.drinks-container');
-    this.addSvgListener(drinksBtnText, drinksBtn, drinksInnerHtml, this.pcPopupDrinksMinigameStart, '.drinks-container');
   }
   addSvgListener(elem, rect, innerHTML, gameStart, selector) {
     elem.addEventListener('click', () => {
       if (!this.pcScreenActive) {
-        //this.pcScreenActive = true;
         rect.setAttribute("fill", "#EDEDED");
         setTimeout(() => {
           const final = document.createElement('div');
@@ -581,7 +550,7 @@ export default class Game {
     imgs.forEach((img) => {
       img.style.position = 'absolute';
       img.style.left = `${Math.floor(Math.random() * 320)}px`;
-      img.style.top = `${Math.floor(Math.random() * 500)}px`;
+      img.style.top = `${Math.floor(Math.random() * 300)}px`;
     });
 
     function mouseDown(event) {
@@ -687,249 +656,13 @@ export default class Game {
       this.classList.add('end');
     });
   }
-  pcPopupDrinksMinigameStart() {
-    const drinkStorage = new THashStorage();
-    addEventHandler('addDrinkBtn', addDrink);
-    addEventHandler('showDrinkInfo', showDrinkInfo);
-    addEventHandler('deleteDrinkBtn', removeDrink);
-    addEventHandler('showDrinksMenuBtn', showDrinksMenu);
-
-    function addEventHandler(id, btnsFunction) {
-      document.getElementById(id).addEventListener('click', () => {
-        btnsFunction();
-      });
-    }
-
-    function addDrink() {
-      const drinkName = prompt('Enter drink\'s name', 'New Drink');
-      let fHash = {};
-
-      if (drinkName) {
-        drinkName.toLowerCase().trim();
-        fHash.recipe = prompt('Enter drink\'s description', 'Description');
-        fHash.alcohol = confirm('Is your drink alcohol?') ? 'yes' : 'no';
-        return drinkStorage.addValue(drinkName, fHash);
-      } else {
-        alert('Declined!');
-      }
-    }
-
-    function showDrinkInfo() {
-      let drinkName = prompt('Enter drink\'s name', '');
-      if (drinkName) {
-        drinkName.toLowerCase().trim();
-      }
-      const getDrinkInfo = (drinkName) ? drinkStorage.getValue(drinkName) : 0;
-      let resultHTML = '';
-
-      if (getDrinkInfo) {
-        const print1 = `Drink: ${drinkName}<br>`;
-        const print2 = `Alcohol: ${getDrinkInfo.alcohol}<br>`;
-        const print3 = `Description: ${getDrinkInfo.recipe}<br>`;
-
-        resultHTML = print1 + print2 + print3;
-      } else {
-        resultHTML = 'Error! There is no such a drink';
-      }
-      document.getElementById('message').innerHTML = resultHTML;
-    }
-
-    function removeDrink() {
-      let drinkName = prompt('Which drink would you like to delete?');
-      let resultHTML = '';
-
-      if (drinkName) {
-        drinkName.toLowerCase().trim();
-      }
-
-      //let delDrinkInfo = drinkStorage.deleteValue(drinkName);
-      let delDrinkInfo = drinkStorage.deleteData(drinkName);
-
-      if (delDrinkInfo && drinkName !== null) {
-        resultHTML = `Drink\'s info ${drinkName} deleted`;
-      } else {
-        resultHTML = 'Error! There is no such a drink';
-      }
-      document.getElementById('message').innerHTML = resultHTML;
-    }
-
-    function showDrinksMenu() {
-      const showMenuInfo = drinkStorage.getKeys();
-      let resultHTML = '';
-
-      if (showMenuInfo.length) {
-        for (let i = 0; i < showMenuInfo.length; i++) {
-          resultHTML += `${i + 1}. ${showMenuInfo[i]} <br>`;
-        }
-      } else {
-        resultHTML = 'No records in menu';
-      }
-      document.getElementById('message').innerHTML = resultHTML;
-    }
-
-    function THashStorage() {
-      const AjaxHandlerScript = "http://fe.it-academy.by/AjaxStringStorage2.php";
-      const self = this;
-      let password = null;
-      let pHash = {};
-
-      self.addValue = function (key, value) {
-        self.value = value;
-        self.key = key;
-        self.getAjaxString();
-      };
-
-      self.getValue = function (key) {
-        return pHash[key];
-      };
-
-      self.deleteValue = function (key) {
-        const del = delete pHash[key];
-        self.lockgetAjaxString();
-        return del;
-      };
-
-      self.getKeys = function () {
-        return (Object.keys(pHash));
-      };
-
-      //fetch is used here
-      function sendHttpRequest(method, url, data) {
-        return fetch(url, {
-          method: method,
-          body: data
-        }).then(response => {
-          self.lockgetReady(response);
-          return response.json();
-        });
-      }
-
-      self.deleteData = async function (key) {
-        delete pHash[key];
-        password = Math.random();
-
-        const fd = new FormData();
-        fd.append('f', 'LOCKGET');
-        fd.append('n', 'BAICHUK_DRINKS');
-        fd.append('p', password);
-
-        await sendHttpRequest(
-          'POST',
-          AjaxHandlerScript,
-          fd
-        );
-      };
-
-      self.getAjaxString = function () {
-        $.ajax({
-          url: AjaxHandlerScript,
-          type: 'POST',
-          data: {
-            f: 'READ',
-            n: 'BAICHUK_DRINKS',
-          },
-          cache: false,
-          success: self.getReady,
-          error: self.errorHandler
-        });
-      };
-
-      self.readAjaxString = function () {
-        $.ajax({
-          url: AjaxHandlerScript,
-          type: 'POST',
-          data: {
-            f: 'READ',
-            n: 'BAICHUK_DRINKS',
-          },
-          cache: false,
-          error: self.errorHandler,
-          success: function (ResultH) {
-            if (ResultH.error != undefined) {
-              alert(ResultH.error);
-            } else {
-              pHash = JSON.parse(ResultH.result);
-            }
-          }
-        });
-      };
-
-      self.readAjaxString();
-
-      self.updateAjaxString = function () {
-        $.ajax({
-          url: AjaxHandlerScript,
-          type: 'POST',
-          data: {
-            f: 'UPDATE',
-            n: 'BAICHUK_DRINKS',
-            v: JSON.stringify(pHash),
-            p: password,
-          },
-          cache: false,
-          error: self.errorHandler,
-          success: function (ResultH) {
-            if (ResultH.error != undefined) {
-              alert(ResultH.error);
-            } else {
-              console.log(ResultH);
-              self.readAjaxString();
-            }
-          }
-        });
-      };
-
-      self.lockgetAjaxString = function () {
-        password = Math.random();
-
-        $.ajax({
-          url: AjaxHandlerScript,
-          type: 'POST',
-          data: {
-            f: 'LOCKGET',
-            n: 'BAICHUK_DRINKS',
-            p: password,
-          },
-          cache: false,
-          success: self.lockgetReady,
-          error: self.errorHandler
-        });
-      };
-
-      self.getReady = function (ResultH) {
-        if (ResultH.error != undefined) {
-          alert(ResultH.error);
-        } else {
-          pHash = JSON.parse(ResultH.result);
-          pHash[self.key] = self.value;
-          self.lockgetAjaxString();
-        }
-      };
-
-      self.lockgetReady = function (ResultH) {
-        if (ResultH.error != undefined) {
-          alert(ResultH.error);
-        } else {
-          self.updateAjaxString();
-        }
-      };
-
-      self.errorHandler = function (jqXHR, StatusStr, ErrorStr) {
-        alert(`${StatusStr} ${ErrorStr}`);
-      };
-    }
-  }
   pcPopupMinigameClose(gameElem) {
     this.gameElem = gameElem;
     const closeBtn = document.querySelector('.pc-close-btn');
     const background = document.querySelector('.final');
-
     closeBtn.addEventListener('click', () => {
       this.gameElem.remove();
     });
-    // background.addEventListener('click', () => {
-    //   this.gameElem.remove();
-    // });
   }
   closePopupByPlayer(self) {
     document.addEventListener('keydown', (e) => {
