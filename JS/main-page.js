@@ -79,6 +79,13 @@ export default class Game {
     
     this.images.forEach((img, i) => {
       let imgsContainer = document.getElementById("view");
+      if (this.images[i].id !== "bg" && this.images[i].id !== "front-shelf"  && this.images[i].id !== "coffee") {
+        this.images[i].classList.add("room__img_type_active");
+      }
+      if (this.images[i].id === "coffee") {
+        this.images[i].style.opacity = 100;
+        this.images[i].style.cursor = "pointer";
+      }
       imgsContainer.appendChild(this.images[i]);
     });
     
@@ -354,7 +361,6 @@ export default class Game {
             }
           });
         }
-
         if (item === itemName && !self.interactiveObjs[itemName].disabled && (itemObj.offsetLeft > this.left * leftNum || itemObj.offsetTop > this.top * topNum)) {
           itemObj.classList.remove('room__img_type_js-active');
         }
@@ -426,7 +432,6 @@ export default class Game {
       });
     });
   }
-
   changeTextAndPopups(item) {
     if (!this.interactiveObjs[item].disabled) {
       this.pageObjs.text.innerHTML = this.text[`${item}Text`];
@@ -443,7 +448,6 @@ export default class Game {
       } else {
         this.audio.click.play();
       }
-
       this.popupClosed = false;
       this.interactiveObjs[item].disabled = true;
       if (item !== 'certificate' && item !== 'pc' && item !== 'photo') {
@@ -487,6 +491,7 @@ export default class Game {
       this.interactiveObjs[item].disabled = true;
       const view = document.getElementById('view');
       document.getElementById(item).style.opacity = 0;
+      document.getElementById(item).style.cursor = "auto";
       let coffeeWrap = document.createElement('div');
       coffeeWrap.innerHTML = '<img id="spilledCoffee" class="room__spilledCoffee" src="pages/main-page/img/spilled-coffee.svg" alt="spilled-coffee">';
       view.appendChild(coffeeWrap);

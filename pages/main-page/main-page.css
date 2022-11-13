@@ -82,6 +82,11 @@
   cursor: pointer;
 }
 
+.room__img_type_coffee {
+  opacity: 100%;
+  cursor: pointer;
+}
+
 .room__img_type_js-active {
   transform: scale(1.15);
 }
