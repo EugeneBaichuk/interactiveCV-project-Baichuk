@@ -63,7 +63,6 @@
   display: block;
   margin: 10px auto;
   width: 250px;
-  height: 50px;
   z-index: 20;
 }
 
@@ -71,7 +70,6 @@
   background: white;
   border: 2px solid #1517A3;
   color: #1517A3;
-  z-index: 20;
 }
 
 .button:hover {
@@ -155,6 +153,9 @@
   }
 
   .button__type_cv-page {
+    padding: 1rem .5rem;
+    font-size: .75rem;
+    width: 200px;
     position: relative;
     bottom: 220px;
   }
@@ -184,6 +185,15 @@
 } 
 
 @media (max-width: 450px) {
+  .button__type_cv-page {
+    padding: .75rem .25rem;
+    bottom: 170px;
+  }
+
+  .start-page-btns {
+    width: 80%;
+  }
+
   .start-page__text {
     margin: 1rem;
     font-size: 1rem;
