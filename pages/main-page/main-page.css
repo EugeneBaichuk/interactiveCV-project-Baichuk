@@ -64,6 +64,14 @@
   transition: opacity 1s ease-out;
 }
 
+.pc-close-btn {
+  top: 3%;
+  right: 3%;
+  width: 4rem;
+  z-index: 200;
+  opacity: 100%;
+}
+
 .room__close-btn-active {
   opacity: 100%;
 }
@@ -156,13 +164,6 @@
   display: block;
   margin: 2rem auto;
   font-size: 1rem;
-}
-
-.pc-close-btn {
-  top: 3%;
-  right: 3%;
-  width: 4rem;
-  z-index: 200;
 }
 
 .pcScreen {
