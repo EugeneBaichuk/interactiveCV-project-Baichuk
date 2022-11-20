@@ -8,7 +8,7 @@ export default class CvPageStart {
   start() {
     this.startWrapper.innerHTML = `
     <section>
-      <object class="cv" type="image/svg+xml" data="pages/cv-page/cv.svg"></object>
+      <object class="cv" type="image/svg+xml" data="pages/cv-page/cv1.svg"></object>
       <a id="cvBtn" href="#" class="button button__type_cv"> Return </a> 
     </section>
     `;

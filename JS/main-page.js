@@ -450,7 +450,7 @@ export default class Game {
       }
       this.popupClosed = false;
       this.interactiveObjs[item].disabled = true;
-      if (item !== 'certificate' && item !== 'pc' && item !== 'photo') {
+      if (item !== 'certificate' && item !== 'pc' && item !== 'photo' && item !== 'mobile') {
         this.pageObjs.popUpContainer.innerHTML = `
         <img id="closeBtn" class="room__close-btn" src="pages/main-page/img/pop-ups/close-btn.svg" alt="pc-popUp">
         <img id="popUp" class="room__bg-img room__popup" src="pages/main-page/img/pop-ups/${item}-popup.svg" alt="pc-popUp">
@@ -464,6 +464,14 @@ export default class Game {
         this.pageObjs.popUpContainer.innerHTML = `
           <img id="closeBtn" class="room__close-btn" src="pages/main-page/img/pop-ups/close-btn.svg" alt="pc-popUp">
           <object data="pages/main-page/img/pop-ups/pc-popup.svg" type="image/svg+xml" id="popUp" class="room__bg-img room__popup pcPopup"></object>
+          `;
+        setTimeout(() => {
+          this.activatePC();
+        }, 1000);
+      } else if (item === 'mobile') {
+        this.pageObjs.popUpContainer.innerHTML = `
+          <img id="closeBtn" class="room__close-btn" src="pages/main-page/img/pop-ups/close-btn.svg" alt="pc-popUp">
+          <object data="pages/main-page/img/pop-ups/mob.svg" type="image/svg+xml" id="popUp" class="room__bg-img room__popup"></object>
           `;
         setTimeout(() => {
           this.activatePC();
