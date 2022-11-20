@@ -25,17 +25,17 @@ export default class Game {
     };
 
     this.text = {
-      helloText: 'Hello. My name is <span class="person__span">Sherlock</span>, and I\'m going to help you to find the best Junior Frontend Developer. <br><br> Please, move your character with the arrows or just click on the objects. <br><br> Let\'s try to look around in the room to find some usefull information.',
-      hobbyText: 'Do you agree that it\'s important to maintain work-life balance? <br><br>I think he has a lot of hobbies and rather interesting life.',
-      photoText: 'Ohh, what a handsome man!',
-      pcText: 'I consider, this is one of his projects. We can have a break and play a game for a minute. <br><br>Did you notice this cool yellow duckling?',
-      'hard-shelfText': 'Bingo!<br><br>We have found essential information about this Junior\'s hard skills.<br><br>It\'s interesting...',
+      helloText: 'Hello. My name is <span class="person__span">Sherlock</span>, and I\'m going to help you to find the best Junior Frontend Developer. We are at his room now. <br><br>Let\'s try to look around to find some usefull information. <br><br> Please, move your character with the arrows or just click on the objects.',
+      hobbyText: 'Do you agree that it\'s important to maintain work-life balance? <br><br> He likes social dance, quest rooms and Pub-quizzes. He is fond of chess and guitar playing. <br><br>I think he has rather interesting life.',
+      photoText: 'This is his photo. <br><br>Ohh, what a handsome man!',
+      pcText: 'The PC is on. We can have a break and play a puzzle game for a minute.<br><br>To complete this puzzle just move its parts to the right places with the mouse. <br><br>Did you notice this cool yellow duckling?',
+      'hard-shelfText': 'We\'ve found some essential information about this Junior\'s hard skills.<br><br> He is a React.js + TypeScript developer. He works with Redux, Redux Thunk and Redux-toolkit. <br><br> Also he knows JS, HTML, CSS and some other tools.',
       certificateText: 'Let\'s see. He finished "IT&#8209;academy" courses in Grodno. <br><br> In my opinion, these courses are some of the best in Belarus. Their graduates have good enough skills to become Junior Developers.',
-      'learn-shelfText': 'This is his diploma.<br><br>Let\'s see if he has a higher education.<br><br>Yes, he has!',
+      'learn-shelfText': 'This is his diploma.<br><br>Besides programming skills he has a higher education in economics!',
       coffeeText: 'He is crazy about coffee. <br><br>Oops...',
-      booksText: 'These are B2 level English books.<br><br>I guessed this guy knew English.',
-      workbookText: 'His employment record book... <br><br> He works as a marketing specialist at JSC "Grodno Azot". <br><br> I think this background also may be usefull.',
-      mobileText: 'We have found some of his contact details and usefull links.<br><br> His name is Eugene. Hi, Eugene!',
+      booksText: 'These are B2 level English books.<br><br>This guy definitely knows English.',
+      workbookText: 'His employment record book... <br><br> He worked as a marketing specialist for 5 years. <br><br> I think this background also may be usefull. He can not only code, but also speak with clients easily.',
+      mobileText: 'We have found his contact details and usefull links.<br><br> His name is Eugene. Hi, Eugene!',
       closeBtnText: 'Let\'s try to interact with other objects',
       popupBgText: 'Let\'s try to interact with other objects',
     };
@@ -148,7 +148,6 @@ export default class Game {
         top: 349.83,
         left: 530.77,
         disabled: false,
-
       },
       'certificate': {
         width: 62.85,
@@ -224,8 +223,6 @@ export default class Game {
         this.containerObj = document.getElementById('room');
         this.playerObj = this.startPlayerImg[0];
         this.containerObj.appendChild(this.playerObj);
-        
-        console.log();
       },
       movePlayer() {
         this.updateView(this.playerObj);
@@ -241,7 +238,6 @@ export default class Game {
       addEventHandler(key, keycode, speedX, speedY) {
         document.addEventListener(key, e => {
           if (e.keyCode === keycode) {
-            //this.updateView(this.playerObj);
             this.changeSpeed(speedX, speedY);
             switch (e.keyCode) {
               case 37:
@@ -261,11 +257,9 @@ export default class Game {
           }
         });
       },
-
       cancelEventHandler(key, keycode, speedX, speedY) {
         document.addEventListener(key, e => {
           if (e.keyCode === keycode) {
-            // cancelAnimationFrame(this.animation);
             this.changeSpeed(speedX, speedY);
           }
         });
@@ -280,7 +274,6 @@ export default class Game {
         this.createBorder((this.top > borderLeft), (borderLeft + this.speedY), -this.speedX);
         this.createBorder((this.top < borderTop), (borderTop + this.speedY), -this.speedX);
         this.createBorder((this.top > borderBottom), (borderBottom + this.speedY), -this.speedX);
-        // cancelAnimationFrame(this.animation);
       },
       createBorder(condition, border, posY) {
         if (condition) {
@@ -340,7 +333,6 @@ export default class Game {
         if (item === itemName && (itemObj.offsetTop >= this.top * topNum && itemObj.offsetLeft <= this.left * leftNum) && !self.interactiveObjs[itemName].disabled) {
           this.popupChangeDisabled = false;
           itemObj.classList.add('room__img_type_js-active');
-
           addEventListener('keydown', (e) => {
             if (!this.popupChangeDisabled && e.code === 'Enter' && item === itemName && itemObj.offsetTop >= this.top * topNum && itemObj.offsetLeft <= this.left * leftNum) {
               self.changeTextAndPopups(item);
@@ -443,11 +435,8 @@ export default class Game {
       this.showFinal(item);
     }
     if (item !== 'coffee' && !this.interactiveObjs[item].disabled && this.popupClosed) {
-      if (item === 'hobby') {
-        this.audio.guitar.play();
-      } else {
-        this.audio.click.play();
-      }
+      (item === 'hobby') ? this.audio.guitar.play() : this.audio.click.play();
+
       this.popupClosed = false;
       this.interactiveObjs[item].disabled = true;
       if (item !== 'certificate' && item !== 'pc' && item !== 'photo' && item !== 'mobile') {
@@ -477,12 +466,14 @@ export default class Game {
           this.activatePC();
         }, 1000);
       }
+      setTimeout(() => {
+        document.querySelector(".room__close-btn").classList.add("room__close-btn-active");
+      }, 1000);
 
       document.getElementById(item).classList.remove('room__img_type_active');
       const popUp = document.getElementById('popUp');
       const popUpBg = document.createElement('div');
-      //здесь использовал promise вместо setTimeout 0
-      const promise = new Promise((resolve, reject) => {
+      const promise = new Promise((resolve) => {
         popUpBg.classList.add('room__bg');
         popUpBg.id = 'popupBg';
         this.pageObjs.roomContainer.appendChild(popUpBg);
