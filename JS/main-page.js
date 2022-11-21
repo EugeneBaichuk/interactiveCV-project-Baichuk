@@ -28,8 +28,8 @@ export default class Game {
       helloText: 'Hello. My name is <span class="person__span">Sherlock</span>, and I\'m going to help you to find the best Junior Frontend Developer. We are at his room now. <br><br>Let\'s try to look around to find some usefull information. <br><br> Please, move your character with the arrows or just click on the objects.',
       hobbyText: 'Do you agree that it\'s important to maintain work-life balance? <br><br> He likes social dance, quest rooms and Pub-quizzes. He is fond of chess and guitar playing. <br><br>I think he has rather interesting life.',
       photoText: 'This is his photo. <br><br>Ohh, what a handsome man!',
-      pcText: 'The PC is on. We can have a break and play a puzzle game for a minute.<br><br>To complete this puzzle just move its parts to the right places with the mouse. <br><br>Did you notice this cool yellow duckling?',
-      'hard-shelfText': 'We\'ve found some essential information about this Junior\'s hard skills.<br><br> He is a React.js + TypeScript developer. He works with Redux, Redux Thunk and Redux-toolkit. <br><br> Also he knows JS, HTML, CSS and some other tools.',
+      pcText: 'The PC is on.<br><br> He is working on his new project using React.js, TypeScript and Redux-toolkit. <br><br>Did you notice this cool yellow duckling?',
+      'hard-shelfText': 'We\'ve found some essential information about this Junior\'s hard skills.<br><br> He knows React.JS, Redux, TypeScript, JS, HTML, CSS and some other tools.',
       certificateText: 'Let\'s see. He finished "IT&#8209;academy" courses in Grodno. <br><br> In my opinion, these courses are some of the best in Belarus. Their graduates have good enough skills to become Junior Developers.',
       'learn-shelfText': 'This is his diploma.<br><br>Besides programming skills he has a higher education in economics!',
       coffeeText: 'He is crazy about coffee. <br><br>Oops...',
@@ -441,25 +441,26 @@ export default class Game {
       this.interactiveObjs[item].disabled = true;
       if (item !== 'certificate' && item !== 'pc' && item !== 'photo' && item !== 'mobile') {
         this.pageObjs.popUpContainer.innerHTML = `
-        <img id="closeBtn" class="room__close-btn" src="pages/main-page/img/pop-ups/close-btn.svg" alt="pc-popUp">
-        <img id="popUp" class="room__bg-img room__popup" src="pages/main-page/img/pop-ups/${item}-popup.svg" alt="pc-popUp">
+        <img id="closeBtn" class="room__close-btn" src="pages/main-page/img/pop-ups/close-btn.svg" alt="closeBtn">
+        <img id="popUp" class="room__bg-img room__popup" src="pages/main-page/img/pop-ups/${item}-popup.svg" alt="popUp">
         `;
       } else if (item === 'certificate' || item === 'photo') {
         this.pageObjs.popUpContainer.innerHTML = `
-          <img id="closeBtn" class="room__close-btn" src="pages/main-page/img/pop-ups/close-btn.svg" alt="pc-popUp">
+          <img id="closeBtn" class="room__close-btn" src="pages/main-page/img/pop-ups/close-btn.svg" alt="closeBtn">
           <img id="popUp" class="room__bg-img room__popup" src="pages/main-page/img/pop-ups/${item}-popup.png" alt="${item}-popUp">
           `;
       } else if (item === 'pc') {
         this.pageObjs.popUpContainer.innerHTML = `
-          <img id="closeBtn" class="room__close-btn" src="pages/main-page/img/pop-ups/close-btn.svg" alt="pc-popUp">
-          <object data="pages/main-page/img/pop-ups/pc-popup.svg" type="image/svg+xml" id="popUp" class="room__bg-img room__popup pcPopup"></object>
+          <img id="closeBtn" class="room__close-btn" src="pages/main-page/img/pop-ups/close-btn.svg" alt="closeBtn">
+          <object data="pages/main-page/img/pop-ups/pc-popup1.svg" type="image/svg+xml" id="popUp" class="room__bg-img room__popup pcPopup"></object>
           `;
         setTimeout(() => {
           this.activatePC();
         }, 1000);
       } else if (item === 'mobile') {
+        this.interactiveObjs[item].disabled = false;
         this.pageObjs.popUpContainer.innerHTML = `
-          <img id="closeBtn" class="room__close-btn" src="pages/main-page/img/pop-ups/close-btn.svg" alt="pc-popUp">
+          <img id="closeBtn" class="room__close-btn" src="pages/main-page/img/pop-ups/close-btn.svg" alt="closeBtn">
           <object data="pages/main-page/img/pop-ups/mob.svg" type="image/svg+xml" id="popUp" class="room__bg-img room__popup"></object>
           `;
         setTimeout(() => {
@@ -470,7 +471,7 @@ export default class Game {
         document.querySelector(".room__close-btn").classList.add("room__close-btn-active");
       }, 1000);
 
-      document.getElementById(item).classList.remove('room__img_type_active');
+      (item !== 'mobile') && document.getElementById(item).classList.remove('room__img_type_active');
       const popUp = document.getElementById('popUp');
       const popUpBg = document.createElement('div');
       const promise = new Promise((resolve) => {
@@ -498,176 +499,176 @@ export default class Game {
       document.getElementById('spilledCoffee').style.opacity = 1;
     }
   }
-  activatePC() {
-    const svgObject = document.querySelector('.pcPopup').contentDocument;
-    const PuzzleBtn = svgObject.getElementById('pcActive');
-    const PuzzleBtnText = svgObject.getElementById('textActive');
-    const puzzleInnerHtml = `
-        <div class="final">
-          <div class="pcScreen">
-            <p class="pcScreen__winner">Puzzle Completed</p>
-            <img class="pcScreen__img" src="pages/main-page/img/puzzle/part1.png">
-            <img class="pcScreen__img" src="pages/main-page/img/puzzle/part2.png">
-            <img class="pcScreen__img" src="pages/main-page/img/puzzle/part3.png">
-            <img class="pcScreen__img" src="pages/main-page/img/puzzle/part4.png">
-            <img class="pcScreen__img" src="pages/main-page/img/puzzle/part5.png">
-            <img class="pcScreen__img" src="pages/main-page/img/puzzle/part6.png">
-            <img class="pcScreen__img" src="pages/main-page/img/puzzle/part7.png">
-            <img class="pcScreen__img" src="pages/main-page/img/puzzle/part8.png">
-            <img class="pcScreen__img" src="pages/main-page/img/puzzle/part9.png">
-            <div class="pcScreen__inner"></div>
-            <img id="closeBtn" class="room__close-btn pc-close-btn" src="pages/main-page/img/pop-ups/close-btn.svg" alt="pc-popUp">
-          </div> 
-        </div>
-        `;
-    this.addSvgListener(PuzzleBtn, PuzzleBtn, puzzleInnerHtml, this.pcPopupPuzzleMinigameStart, '.pcScreen');
-    this.addSvgListener(PuzzleBtnText, PuzzleBtn, puzzleInnerHtml, this.pcPopupPuzzleMinigameStart, '.pcScreen');
-  }
-  addSvgListener(elem, rect, innerHTML, gameStart, selector) {
-    elem.addEventListener('click', () => {
-      if (!this.pcScreenActive) {
-        rect.setAttribute("fill", "#EDEDED");
-        setTimeout(() => {
-          const final = document.createElement('div');
-          final.innerHTML = innerHTML;
-          rect.setAttribute("fill", "white");
-          document.getElementById('start-wrapper').appendChild(final);
-          gameStart();
-          setTimeout(() => {
-            document.querySelector(selector).style.opacity = 1;
-          }, 0);
-          this.pcPopupMinigameClose(final);
-        }, 1000);
-      }
-    });
-  }
-  pcPopupPuzzleMinigameStart() {
-    const container = document.querySelector('.pcScreen');
-    container.style.position = 'relative';
-    const imgs = document.querySelectorAll('.pcScreen__img');
-    let counter = 0;
-    const innerContainer = document.querySelector('.pcScreen__inner');
-    let xInside, yInside;
-    let img;
-    container.addEventListener('mousedown', mouseDown, false);
+  // activatePC() {
+  //   const svgObject = document.querySelector('.pcPopup').contentDocument;
+  //   const PuzzleBtn = svgObject.getElementById('pcActive');
+  //   const PuzzleBtnText = svgObject.getElementById('textActive');
+  //   const puzzleInnerHtml = `
+  //       <div class="final">
+  //         <div class="pcScreen">
+  //           <p class="pcScreen__winner">Puzzle Completed</p>
+  //           <img class="pcScreen__img" src="pages/main-page/img/puzzle/part1.png">
+  //           <img class="pcScreen__img" src="pages/main-page/img/puzzle/part2.png">
+  //           <img class="pcScreen__img" src="pages/main-page/img/puzzle/part3.png">
+  //           <img class="pcScreen__img" src="pages/main-page/img/puzzle/part4.png">
+  //           <img class="pcScreen__img" src="pages/main-page/img/puzzle/part5.png">
+  //           <img class="pcScreen__img" src="pages/main-page/img/puzzle/part6.png">
+  //           <img class="pcScreen__img" src="pages/main-page/img/puzzle/part7.png">
+  //           <img class="pcScreen__img" src="pages/main-page/img/puzzle/part8.png">
+  //           <img class="pcScreen__img" src="pages/main-page/img/puzzle/part9.png">
+  //           <div class="pcScreen__inner"></div>
+  //           <img id="closeBtn" class="room__close-btn pc-close-btn" src="pages/main-page/img/pop-ups/close-btn.svg" alt="closeBtn">
+  //         </div> 
+  //       </div>
+  //       `;
+  //   this.addSvgListener(PuzzleBtn, PuzzleBtn, puzzleInnerHtml, this.pcPopupPuzzleMinigameStart, '.pcScreen');
+  //   this.addSvgListener(PuzzleBtnText, PuzzleBtn, puzzleInnerHtml, this.pcPopupPuzzleMinigameStart, '.pcScreen');
+  // }
+  // addSvgListener(elem, rect, innerHTML, gameStart, selector) {
+  //   elem.addEventListener('click', () => {
+  //     if (!this.pcScreenActive) {
+  //       rect.setAttribute("fill", "#EDEDED");
+  //       setTimeout(() => {
+  //         const final = document.createElement('div');
+  //         final.innerHTML = innerHTML;
+  //         rect.setAttribute("fill", "white");
+  //         document.getElementById('start-wrapper').appendChild(final);
+  //         gameStart();
+  //         setTimeout(() => {
+  //           document.querySelector(selector).style.opacity = 1;
+  //         }, 0);
+  //         this.pcPopupMinigameClose(final);
+  //       }, 1000);
+  //     }
+  //   });
+  // }
+  // pcPopupPuzzleMinigameStart() {
+  //   const container = document.querySelector('.pcScreen');
+  //   container.style.position = 'relative';
+  //   const imgs = document.querySelectorAll('.pcScreen__img');
+  //   let counter = 0;
+  //   const innerContainer = document.querySelector('.pcScreen__inner');
+  //   let xInside, yInside;
+  //   let img;
+  //   container.addEventListener('mousedown', mouseDown, false);
 
-    imgs.forEach((img) => {
-      img.style.position = 'absolute';
-      img.style.left = `${Math.floor(Math.random() * 320)}px`;
-      img.style.top = `${Math.floor(Math.random() * 300)}px`;
-    });
+  //   imgs.forEach((img) => {
+  //     img.style.position = 'absolute';
+  //     img.style.left = `${Math.floor(Math.random() * 320)}px`;
+  //     img.style.top = `${Math.floor(Math.random() * 300)}px`;
+  //   });
 
-    function mouseDown(event) {
-      img = event.target;
-      if (img.tagName === 'IMG' && !img.disabled) {
-        event.preventDefault();
-        img.style.cursor = 'pointer';
-        img.style.zIndex = 5; //картинка падает на самый нижний слой
-        xInside = event.pageX - img.offsetLeft - this.offsetLeft; //координаты клика внутри img
-        yInside = event.pageY - img.offsetTop - this.offsetTop;
-        container.addEventListener('mousemove', mouseMove, false);
-        container.addEventListener('mouseup', mouseUp, false);
-      }
-    }
+  //   function mouseDown(event) {
+  //     img = event.target;
+  //     if (img.tagName === 'IMG' && !img.disabled) {
+  //       event.preventDefault();
+  //       img.style.cursor = 'pointer';
+  //       img.style.zIndex = 5; //картинка падает на самый нижний слой
+  //       xInside = event.pageX - img.offsetLeft - this.offsetLeft; //координаты клика внутри img
+  //       yInside = event.pageY - img.offsetTop - this.offsetTop;
+  //       container.addEventListener('mousemove', mouseMove, false);
+  //       container.addEventListener('mouseup', mouseUp, false);
+  //     }
+  //   }
 
-    function mouseMove(event) {
-      if (img.tagName === 'IMG') {
-        event.preventDefault();
-        // находим координаты клика внутри container и меняем положение img  
-        const insideContainerX = event.pageX - this.offsetLeft - xInside;
-        const insideContainerY = event.pageY - this.offsetTop - yInside;
-        img.style.left = `${insideContainerX}px`;
-        img.style.top = `${insideContainerY}px`;
-        //огр. область перемещения картинок размером контейнера + меняем border у контейнера на красный
-        addAlarm(insideContainerX, insideContainerY, this);
-      }
-    }
+  //   function mouseMove(event) {
+  //     if (img.tagName === 'IMG') {
+  //       event.preventDefault();
+  //       // находим координаты клика внутри container и меняем положение img  
+  //       const insideContainerX = event.pageX - this.offsetLeft - xInside;
+  //       const insideContainerY = event.pageY - this.offsetTop - yInside;
+  //       img.style.left = `${insideContainerX}px`;
+  //       img.style.top = `${insideContainerY}px`;
+  //       //огр. область перемещения картинок размером контейнера + меняем border у контейнера на красный
+  //       addAlarm(insideContainerX, insideContainerY, this);
+  //     }
+  //   }
 
-    function mouseUp(event) {
-      event.preventDefault();
-      img.style.cursor = 'default';
-      img.style.zIndex = 1;
-      container.removeEventListener('mousemove', mouseMove);
-      container.removeEventListener('mouseup', mouseUp);
-      const sides = {
-        left: img.offsetLeft,
-        right: img.offsetLeft + img.offsetWidth,
-        top: img.offsetTop,
-        bottom: img.offsetTop + img.offsetHeight,
-        contLeft: innerContainer.offsetLeft,
-        contRight: innerContainer.offsetLeft + innerContainer.offsetWidth,
-        contTop: innerContainer.offsetTop,
-        contBottom: innerContainer.offsetTop + innerContainer.offsetHeight,
-      };
-      const imgArr = Array.from(imgs);
+  //   function mouseUp(event) {
+  //     event.preventDefault();
+  //     img.style.cursor = 'default';
+  //     img.style.zIndex = 1;
+  //     container.removeEventListener('mousemove', mouseMove);
+  //     container.removeEventListener('mouseup', mouseUp);
+  //     const sides = {
+  //       left: img.offsetLeft,
+  //       right: img.offsetLeft + img.offsetWidth,
+  //       top: img.offsetTop,
+  //       bottom: img.offsetTop + img.offsetHeight,
+  //       contLeft: innerContainer.offsetLeft,
+  //       contRight: innerContainer.offsetLeft + innerContainer.offsetWidth,
+  //       contTop: innerContainer.offsetTop,
+  //       contBottom: innerContainer.offsetTop + innerContainer.offsetHeight,
+  //     };
+  //     const imgArr = Array.from(imgs);
 
-      for (let key in imgArr) {
-        if (imgArr[key] === img) {
-          if (key < 3 && sides.left >= sides.contLeft + (+key * img.offsetWidth - 30) && sides.right <= sides.contLeft + ((+key + 1) * img.offsetWidth + 30) && sides.bottom <= sides.contBottom - 2 * img.offsetWidth + 30 && sides.top >= sides.contTop) {
-            img.disabled = true;
-            imgArr[key].style.top = `${sides.contTop + 2}px`;
-            imgArr[key].style.left = `${sides.contLeft + key*img.offsetWidth + 1}px`;
-            counter += 1;
-          } else if (key < 6 && (sides.left >= sides.contLeft + (+key - 3) * img.offsetWidth - 30) && sides.right <= sides.contLeft + ((+key - 2) * img.offsetWidth + 30) && sides.bottom <= sides.contBottom - img.offsetWidth + 30 && sides.top >= sides.contTop + img.offsetWidth - 30) {
-            img.disabled = true;
-            imgArr[key].style.top = `${sides.contTop +img.offsetHeight+ 1}px`;
-            imgArr[key].style.left = `${sides.contLeft + (key-3)*img.offsetWidth + 1}px`;
-            counter += 1;
-          } else if ((sides.left >= sides.contLeft + (+key - 6) * img.offsetWidth - 30) && sides.right <= sides.contLeft + ((+key - 5) * img.offsetWidth + 30) && sides.bottom <= sides.contBottom && sides.top >= sides.contTop + 2 * img.offsetWidth - 30) {
-            img.disabled = true;
-            imgArr[key].style.top = `${sides.contTop +img.offsetHeight*2}px`;
-            imgArr[key].style.left = `${sides.contLeft + (key-6)*img.offsetWidth + 1}px`;
-            counter += 1;
-          }
-          if (counter >= 9) {
-            document.querySelector('.pcScreen__winner').classList.add('pcScreen__winner_type_active');
-            setTimeout(() => {
-              document.querySelector('.final').remove();
-            }, 2000);
-          }
-        }
-      }
-    }
+  //     for (let key in imgArr) {
+  //       if (imgArr[key] === img) {
+  //         if (key < 3 && sides.left >= sides.contLeft + (+key * img.offsetWidth - 30) && sides.right <= sides.contLeft + ((+key + 1) * img.offsetWidth + 30) && sides.bottom <= sides.contBottom - 2 * img.offsetWidth + 30 && sides.top >= sides.contTop) {
+  //           img.disabled = true;
+  //           imgArr[key].style.top = `${sides.contTop + 2}px`;
+  //           imgArr[key].style.left = `${sides.contLeft + key*img.offsetWidth + 1}px`;
+  //           counter += 1;
+  //         } else if (key < 6 && (sides.left >= sides.contLeft + (+key - 3) * img.offsetWidth - 30) && sides.right <= sides.contLeft + ((+key - 2) * img.offsetWidth + 30) && sides.bottom <= sides.contBottom - img.offsetWidth + 30 && sides.top >= sides.contTop + img.offsetWidth - 30) {
+  //           img.disabled = true;
+  //           imgArr[key].style.top = `${sides.contTop +img.offsetHeight+ 1}px`;
+  //           imgArr[key].style.left = `${sides.contLeft + (key-3)*img.offsetWidth + 1}px`;
+  //           counter += 1;
+  //         } else if ((sides.left >= sides.contLeft + (+key - 6) * img.offsetWidth - 30) && sides.right <= sides.contLeft + ((+key - 5) * img.offsetWidth + 30) && sides.bottom <= sides.contBottom && sides.top >= sides.contTop + 2 * img.offsetWidth - 30) {
+  //           img.disabled = true;
+  //           imgArr[key].style.top = `${sides.contTop +img.offsetHeight*2}px`;
+  //           imgArr[key].style.left = `${sides.contLeft + (key-6)*img.offsetWidth + 1}px`;
+  //           counter += 1;
+  //         }
+  //         if (counter >= 9) {
+  //           document.querySelector('.pcScreen__winner').classList.add('pcScreen__winner_type_active');
+  //           setTimeout(() => {
+  //             document.querySelector('.final').remove();
+  //           }, 2000);
+  //         }
+  //       }
+  //     }
+  //   }
 
-    function addAlarm(x, y, container) {
-      makeLimits('clientHeight', y, 'top', container);
-      makeLimits('clientWidth', x, 'left', container);
-      if ((y > 0 && y < container.clientHeight - img.clientHeight) && (x > 0 && x < container.clientWidth - img.clientWidth)) {
-        container.classList.remove('alarm');
-      }
-    }
+  //   function addAlarm(x, y, container) {
+  //     makeLimits('clientHeight', y, 'top', container);
+  //     makeLimits('clientWidth', x, 'left', container);
+  //     if ((y > 0 && y < container.clientHeight - img.clientHeight) && (x > 0 && x < container.clientWidth - img.clientWidth)) {
+  //       container.classList.remove('alarm');
+  //     }
+  //   }
 
-    function makeLimits(limit, position, side, container) {
-      const heightLimit = container[limit] - img[limit];
-      if (position <= 0) {
-        img.style[side] = 0 + 'px';
-        container.classList.add('alarm');
-      } else if (position >= heightLimit) {
-        img.style[side] = `${heightLimit}px`;
-        container.classList.add('alarm');
-      }
-    }
+  //   function makeLimits(limit, position, side, container) {
+  //     const heightLimit = container[limit] - img[limit];
+  //     if (position <= 0) {
+  //       img.style[side] = 0 + 'px';
+  //       container.classList.add('alarm');
+  //     } else if (position >= heightLimit) {
+  //       img.style[side] = `${heightLimit}px`;
+  //       container.classList.add('alarm');
+  //     }
+  //   }
 
-    container.addEventListener('mouseover', function () {
-      if (this.classList.contains('end')) {
-        this.classList.remove('end'); // для плавной анимации в обе стороны
-      }
-      this.classList.add('start');
-    });
+  //   container.addEventListener('mouseover', function () {
+  //     if (this.classList.contains('end')) {
+  //       this.classList.remove('end'); // для плавной анимации в обе стороны
+  //     }
+  //     this.classList.add('start');
+  //   });
 
-    container.addEventListener('mouseout', function () {
-      this.classList.remove('start');
-      this.classList.add('end');
-    });
-  }
-  pcPopupMinigameClose(gameElem) {
-    this.gameElem = gameElem;
-    const closeBtn = document.querySelector('.pc-close-btn');
-    const background = document.querySelector('.final');
-    closeBtn.addEventListener('click', () => {
-      this.gameElem.remove();
-    });
-  }
+  //   container.addEventListener('mouseout', function () {
+  //     this.classList.remove('start');
+  //     this.classList.add('end');
+  //   });
+  // }
+  // pcPopupMinigameClose(gameElem) {
+  //   this.gameElem = gameElem;
+  //   const closeBtn = document.querySelector('.pc-close-btn');
+  //   const background = document.querySelector('.final');
+  //   closeBtn.addEventListener('click', () => {
+  //     this.gameElem.remove();
+  //   });
+  // }
   closePopupByPlayer(self) {
     document.addEventListener('keydown', (e) => {
       if (!self.popupClosed && (e.code === "Enter" || e.code === "Escape")) {
